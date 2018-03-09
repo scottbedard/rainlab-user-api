@@ -8,7 +8,6 @@ use RainLab\User\Models\Settings as UserSettings;
 class PluginTestCase extends BasePluginTestCase
 {
     protected $refreshPlugins = [
-        'RainLab.User',
         'GivingTeam.Auth',
     ];
 
