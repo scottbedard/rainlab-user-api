@@ -6,18 +6,35 @@ use GivingTeam\Auth\Classes\AccountManager;
 use GivingTeam\Auth\Exceptions\RegistrationDisabledException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use RainLab\User\Models\Settings as UserSettings;
 use ValidationException;
 
 class AuthController extends Controller
 {
 
     /**
-     * Register a user.
+     * Activate the user.
      * 
-     * @param  \Illuminate\Http\Request  $request
+     */
+    public function activate(AccountManager $manager)
+    {
+        // try {
+            $manager->activate(input('code'));
+        // }
+
+        // catch (Exception $e) {
+
+        // }
+
+        return redirect(UserSettings::get('activation_redirect', url()));
+    }
+
+    /**
+     * Register the user.
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, AccountManager $account)
+    public function store(AccountManager $account)
     {
         // attempt to create the account
         try {
@@ -46,8 +63,6 @@ class AuthController extends Controller
                 'status' => 'unknown_error',
             ], 500);
         }
-        
-        // @todo: fire an event
 
         return $user;
     }

@@ -30,6 +30,8 @@ class PluginTestCase extends BasePluginTestCase
         $alias->alias('Auth', 'RainLab\User\Facades\Auth');
 
         // reset modified settings
+        UserSettings::resetDefault();
+        UserSettings::set('activate_mode', 'auto');
         UserSettings::set('allow_registration', true);
     
         App::singleton('user.auth', function() {
