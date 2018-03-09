@@ -24,14 +24,14 @@ class PluginTestCase extends BasePluginTestCase
     {
         parent::setUp();
 
-        // register the Auth facade in our test environment
-        $alias = AliasLoader::getInstance();
-        $alias->alias('Auth', 'RainLab\User\Facades\Auth');
-
         // reset modified settings
         UserSettings::resetDefault();
         UserSettings::set('activate_mode', 'auto');
         UserSettings::set('allow_registration', true);
+
+        // register the auth facade
+        $alias = AliasLoader::getInstance();
+        $alias->alias('Auth', 'RainLab\User\Facades\Auth');
     
         App::singleton('user.auth', function() {
             return \RainLab\User\Classes\AuthManager::instance();
