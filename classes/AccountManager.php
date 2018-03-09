@@ -108,8 +108,14 @@ class AccountManager
         if ($this->userActivation()) {
             $this->sendActivationEmail($user);
         }
-        
 
+        // sign the user in if they were automatically 
+        // activated, or require no activation
+        if ($this->automaticActivation() || !$this->requireActivation()) {
+            Auth::login($user);
+        }
+        
+        // and finally, return the user
         return $user;
     }
 
@@ -134,6 +140,16 @@ class AccountManager
         print_r (url('/api/givingteam/auth/activate'));
 
         return '';
+    }
+
+    /**
+     * Determine if activation is required.
+     * 
+     * @return boolean
+     */
+    protected function requireActivation()
+    {
+        return UserSettings::get('require_activation', true);
     }
 
     /**
