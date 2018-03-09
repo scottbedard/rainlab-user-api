@@ -1,6 +1,7 @@
 <?php namespace GivingTeam\Auth\Tests;
 
 use App;
+use Artisan;
 use Illuminate\Foundation\AliasLoader;
 use PluginTestCase as BasePluginTestCase;
 use RainLab\User\Models\Settings as UserSettings;
@@ -36,5 +37,8 @@ class PluginTestCase extends BasePluginTestCase
         App::singleton('user.auth', function() {
             return \RainLab\User\Classes\AuthManager::instance();
         });
+
+        // make sure all plugins are updated
+        Artisan::call('october:up');
     }
 }
