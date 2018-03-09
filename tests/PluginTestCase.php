@@ -37,8 +37,12 @@ class PluginTestCase extends BasePluginTestCase
         App::singleton('user.auth', function() {
             return \RainLab\User\Classes\AuthManager::instance();
         });
+    }
 
-        // make sure all plugins are updated
-        Artisan::call('october:up');
+    public function runPluginRefreshCommand($code, $throwException = true)
+    {
+        print_r ('refreshing plugins');
+
+        return parent::runPluginRefreshCommand($code, $throwException);
     }
 }
