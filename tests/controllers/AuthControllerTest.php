@@ -117,4 +117,13 @@ class AuthControllerTest extends PluginTestCase
         // and last, we should be redirected to the correct url
         $response->assertRedirect('https://example.com');
     }
+
+    public function test_activating_with_an_invalid_code()
+    {
+        $response = $this->get('/api/givingteam/auth/activate?code=123');
+        
+        $response->assertStatus(400);
+        $content = $response->getOriginalContent();
+        $this->assertEquals('validation_failed', $content['status']);
+    }
 }

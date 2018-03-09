@@ -18,13 +18,18 @@ class AuthController extends Controller
      */
     public function activate(AccountManager $manager)
     {
-        // try {
+        // attempt to activate the user
+        try {
             $manager->activate(input('code'));
-        // }
+        }
 
-        // catch (Exception $e) {
-
-        // }
+        // invalid activation code
+        catch (ValidationException $e) {
+            return response([
+                'status' => 'validation_failed',
+                'message' => $e->getMessage(),
+            ], 400);
+        }
 
         return redirect(UserSettings::get('activation_redirect', url()));
     }
@@ -56,12 +61,6 @@ class AuthController extends Controller
                 'status' => 'validation_failed',
                 'message' => $e->getMessage(),
             ], 400);
-        }
-
-        catch (Exception $e) {
-            return response([
-                'status' => 'unknown_error',
-            ], 500);
         }
 
         return $user;
