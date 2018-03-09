@@ -38,11 +38,4 @@ class PluginTestCase extends BasePluginTestCase
             return \RainLab\User\Classes\AuthManager::instance();
         });
     }
-
-    public function runPluginRefreshCommand($code, $throwException = true)
-    {
-        print_r ('refreshing plugins');
-
-        return parent::runPluginRefreshCommand($code, $throwException);
-    }
 }
