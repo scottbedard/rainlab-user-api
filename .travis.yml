@@ -24,9 +24,6 @@ before_script:
   - mv config/cms.php.testing config/testing/cms.php
   - cd plugins/givingteam/auth
   - composer install
-  - cd ../../../
-  - php artisan october:up
-  - cd plugins/givingteam/auth
 
 script:
   - mkdir -p build/logs
