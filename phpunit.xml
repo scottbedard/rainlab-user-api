@@ -22,11 +22,19 @@
     </php>
     <filter>
         <blacklist>
-            <file>./Plugin.php</file>
-            <directory>./updates</directory>
-            <directory>./vendor</directory>
+            
         </blacklist>
-        <whitelist processUncoveredFilesFromWhitelist="true"></whitelist>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./classes</directory>
+            <directory suffix=".php">./exceptions</directory>
+            <directory suffix=".php">./http</directory>
+            <exclude>
+                <file>./Plugin.php</file>
+                <directory>./tests</directory>
+                <directory>./updates</directory>
+                <directory>./vendor</directory>
+            </exclude>
+        </whitelist>
     </filter>
     <logging>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
