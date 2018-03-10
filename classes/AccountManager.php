@@ -6,8 +6,9 @@ use Event;
 use GivingTeam\Auth\Exceptions\InvalidUserException;
 use GivingTeam\Auth\Exceptions\RegistrationDisabledException;
 use Mail;
-use RainLab\User\Models\User;
+use October\Rain\Auth\AuthException;
 use RainLab\User\Models\Settings as UserSettings;
+use RainLab\User\Models\User;
 use ValidationException;
 use Validator;
 
@@ -49,6 +50,48 @@ class AccountManager
 
         // sign the user in
         Auth::login($user);
+    }
+
+    /**
+     * Attempt to authenticate a user.
+     * 
+     * @param  array    $data
+     * @return RainLab\User\Models\User
+     */
+    public function authenticate(array $data)
+    {
+        // validate the request
+        $rules = [
+            'password' => 'required|between:4,255'
+        ];
+
+        $rules['login'] = $this->loginAttribute() == UserSettings::LOGIN_USERNAME
+            ? 'required|between:2,255' // <- username
+            : 'required|email|between:6,255'; // <- email
+         
+        $validation = Validator::make($data, $rules);
+            
+        if ($validation->fails()) {
+            throw new ValidationException($validation);
+        }
+
+        // attempt to authenticate
+        $credentials = [
+            'login'    => array_get($data, 'login'),
+            'password' => array_get($data, 'password')
+        ];
+
+        Event::fire('rainlab.user.beforeAuthenticate', [$this, $credentials]);
+
+        $user = Auth::authenticate($credentials, true);
+
+        // throw an exception if the user is banned
+        if ($user->isBanned()) {
+            Auth::logout();
+            throw new AuthException('rainlab.user::lang.account.banned');
+        }
+
+        return self::getAuthenticatedUser();
     }
 
     /**
@@ -160,6 +203,53 @@ class AccountManager
     protected function requireActivation()
     {
         return UserSettings::get('require_activation', true);
+    }
+
+    /**
+     * Reset a user's password.
+     * 
+     * @param  array    $data
+     * @return void
+     */
+    public function resetPassword($data)
+    {
+        // validate the request
+        $rules = [
+            'code'     => 'required',
+            'password' => 'required|between:4,255'
+        ];
+
+        $validation = Validator::make($data, $rules);
+
+        if ($validation->fails()) {
+            throw new ValidationException($validation);
+        }
+
+        $errorFields = [
+            'code' => trans('rainlab.user::lang.account.invalid_activation_code')
+        ];
+
+        // break up the code parts
+        $parts = explode('!', $data['code']);
+
+        if (count($parts) != 2) {
+            throw new ValidationException($errorFields);
+        }
+
+        list($userId, $code) = $parts;
+        
+        if (!strlen(trim($userId)) || !strlen(trim($code)) || !$code) {
+            throw new ValidationException($errorFields);
+        }
+
+        // find the user and reset their password
+        if (!$user = Auth::findUserById($userId)) {
+            throw new ValidationException($errorFields);
+        }
+
+        if (!$user->attemptResetPassword($code, $data['password'])) {
+            throw new ValidationException($errorFields);
+        }
     }
 
     /**

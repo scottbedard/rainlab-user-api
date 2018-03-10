@@ -8,10 +8,19 @@ use RainLab\User\Models\Settings as UserSettings;
 
 class PluginTestCase extends BasePluginTestCase
 {
+    /**
+     * @var array   Plugins to refresh between tests.
+     */
     protected $refreshPlugins = [
         'GivingTeam.Auth',
+        'RainLab.User',
     ];
 
+    /**
+     * Creates the application.
+     * 
+     * @return Symfony\Component\HttpKernel\HttpKernelInterface
+     */
     public function createApplication()
     {
         $app = parent::createApplication();
@@ -21,6 +30,11 @@ class PluginTestCase extends BasePluginTestCase
         return $app;
     }
 
+    /**
+     * Perform test case set up.
+     * 
+     * @return void
+     */
     public function setUp()
     {
         parent::setUp();

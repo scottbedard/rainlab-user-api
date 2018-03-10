@@ -174,6 +174,76 @@ class AuthControllerTest extends PluginTestCase
 
     public function test_resetting_a_users_password()
     {
-        echo 'hey';
+        // create a user with a password of "hello"
+        $this->post('/api/givingteam/auth/register', [
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => 'hello',
+            'password_confirmation' => 'hello',
+        ]);
+
+        $user = User::findByEmail('john@example.com');
+
+        // reset the user's password to "whatever"
+        $response = $this->post('/api/givingteam/auth/reset-password', [
+            'code' => implode('!', [$user->id, $user->getResetPasswordCode()]),
+            'password' => 'whatever',
+        ]);
+
+        // verify that the response was successful
+        $response->assertStatus(200);
+        $this->assertEquals('success', $response->getOriginalContent()['status']);
+
+        // verify that the password has been updated
+        $user->reload();
+        $this->assertTrue($user->checkPassword('whatever'));
+    }
+
+    public function test_authenticating_a_user()
+    {
+        // create a user
+        $this->post('/api/givingteam/auth/register', [
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => 'hello',
+            'password_confirmation' => 'hello',
+        ]);
+
+        // just a sanity check, we should be logged out before logging in
+        Auth::logout();
+
+        $response = $this->post('/api/givingteam/auth', [
+            'login' => 'john@example.com',
+            'password' => 'hello',
+            'remember' => false,
+        ]);
+
+        // the user should have been returned, and we should now be logged in
+        $this->assertEquals('john@example.com', $response->getOriginalContent()->email);
+        $this->assertEquals('john@example.com', Auth::getUser()->email);
+        $this->assertTrue(Auth::check());
+    }
+
+    public function test_authentication_with_incorrect_credentials()
+    {
+        // create a user
+        $this->post('/api/givingteam/auth/register', [
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => 'hello',
+            'password_confirmation' => 'hello',
+        ]);
+
+        // just a sanity check, we should be logged out before logging in
+        Auth::logout();
+
+        $response = $this->post('/api/givingteam/auth', [
+            'login' => 'john@example.com',
+            'password' => 'wrong-password',
+            'remember' => false,
+        ]);
+
+        $response->assertStatus(403);
+        $this->assertEquals('authentication_failed', $response->getOriginalContent()['status']);
     }
 }

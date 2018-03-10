@@ -8,6 +8,7 @@ use GivingTeam\Auth\Exceptions\InvalidUserException;
 use GivingTeam\Auth\Exceptions\RegistrationDisabledException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use October\Rain\Auth\AuthException;
 use RainLab\User\Models\Settings as UserSettings;
 use ValidationException;
 
@@ -35,6 +36,38 @@ class AuthController extends Controller
         }
 
         return redirect(UserSettings::get('activation_redirect', url()));
+    }
+
+    /**
+     * Attempt to authenticate a user.
+     * 
+     * @return Illuminate\Http\Response
+     */
+    public function authenticate(AccountManager $manager)
+    {
+        // authenticate the user
+        try {
+            $data = input();
+            $user = $manager->authenticate($data);
+        }
+
+        // validation failed
+        catch (ValidationException $e) {
+            return response([
+                'status' => 'validation_failed',
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+
+        // authentication failed
+        catch (AuthException $e) {
+            return response([
+                'status' => 'authentication_failed',
+                'message' => $e->getMessage(),
+            ], 403);
+        }
+
+        return $user;
     }
 
     /**
@@ -67,6 +100,31 @@ class AuthController extends Controller
         }
 
         return $user;
+    }
+
+    /**
+     * Reset a user's password.
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function resetPassword(AccountManager $manager)
+    {
+        // attempt to reset the user's password
+        try {
+            $manager->resetPassword(input());
+        }
+
+        // invalid
+        catch (ValidationException $e) {
+            return response([
+                'status' => 'validation_failed',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+
+        return response([
+            'status' => 'success',
+        ], 200);
     }
 
     /**
