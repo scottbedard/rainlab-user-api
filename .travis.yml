@@ -18,7 +18,7 @@ before_script:
   - mkdir -p ./october/plugins/givingteam/auth
   - mv !(october) october/plugins/givingteam/auth
   - cd october
-  - git clone https://github.com/rainlab/user-plugin.git plugins/rainlab/user
+  - git clone https://github.com/scottbedard/user-plugin.git plugins/rainlab/user
   - composer install
   - cp config/cms.php config/cms.php.testing
   - mv config/cms.php.testing config/testing/cms.php
