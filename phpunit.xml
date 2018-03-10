@@ -26,6 +26,10 @@
             <directory>./updates</directory>
             <directory>./vendor</directory>
         </blacklist>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">/</directory>
+            <file>/</file>
+        </whitelist>
     </filter>
     <logging>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
