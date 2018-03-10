@@ -1,6 +1,6 @@
 <?php
 
-Route::prefix('api/givingteam/auth')->group(function() {
+Route::prefix('api/givingteam/auth')->middleware('web')->group(function() {
 
     // authenticate a user
     Route::post('/', 'GivingTeam\Auth\Http\Controllers\AuthController@authenticate');
