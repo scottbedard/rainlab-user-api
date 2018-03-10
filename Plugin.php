@@ -56,6 +56,7 @@ class Plugin extends PluginBase
             }
 
             $widget->addTabFields([
+                // activation redirect
                 'activation_redirect' => [
                     'comment'   => 'givingteam.auth::lang.settings.activation_redirect_comment',
                     'label'     => 'givingteam.auth::lang.settings.activation_redirect_label',

@@ -218,7 +218,6 @@ class AccountManager
 
         $data = [
             'name' => $user->name,
-            'link' => url('api/givingteam/auth/activate?code=' . $code),
             'code' => $code,
         ];
 
