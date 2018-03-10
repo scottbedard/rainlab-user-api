@@ -1,5 +1,6 @@
 <?php namespace GivingTeam\Auth\Http\Controllers;
 
+use Auth;
 use ApplicationException;
 use Exception;
 use GivingTeam\Auth\Classes\AccountManager;
@@ -15,6 +16,7 @@ class AuthController extends Controller
     /**
      * Activate the user.
      * 
+     * @return \Illuminate\Http\Response
      */
     public function activate(AccountManager $manager)
     {
@@ -35,16 +37,16 @@ class AuthController extends Controller
     }
 
     /**
-     * Register the user.
+     * Register a user.
      * 
      * @return \Illuminate\Http\Response
      */
-    public function store(AccountManager $account)
+    public function register(AccountManager $manager)
     {
         // attempt to create the account
         try {
             $data = input();
-            $user = $account->create($data);
+            $user = $manager->create($data);
         }
 
         // registration is disabled
@@ -64,5 +66,15 @@ class AuthController extends Controller
         }
 
         return $user;
+    }
+
+    /**
+     * Get the currently authenticated user.
+     * 
+     * @return Response
+     */
+    public function user(AccountManager $manager)
+    {
+        return $manager->getAuthenticatedUser();
     }
 }

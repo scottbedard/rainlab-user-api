@@ -1,11 +1,15 @@
 <?php
 
 Route::prefix('api/givingteam/auth')->group(function() {
-    Route::resource('/', 'GivingTeam\Auth\Http\Controllers\AuthController');
+
+    // activate a user
     Route::get('activate', 'GivingTeam\Auth\Http\Controllers\AuthController@activate');
-    
-    // reset password
-    // register
-    // authenticate
-    // un-authenticate
+
+    // register a user
+    Route::post('register', 'GivingTeam\Auth\Http\Controllers\AuthController@register');
+
+    // authentication required
+    Route::group(['middleware' => 'RainLab\User\Classes\AuthMiddleware'], function () {
+        Route::get('user', 'GivingTeam\Auth\Http\Controllers\AuthController@user');
+    });
 });

@@ -1,5 +1,6 @@
 <?php namespace GivingTeam\Auth\Tests\Controllers;
 
+use Auth;
 use Event;
 use Mail;
 use GivingTeam\Auth\Tests\PluginTestCase;
@@ -10,7 +11,7 @@ class AuthControllerTest extends PluginTestCase
 {
     public function test_creating_a_new_user()
     {
-        $response = $this->post('/api/givingteam/auth', [
+        $response = $this->post('/api/givingteam/auth/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -30,7 +31,7 @@ class AuthControllerTest extends PluginTestCase
         // reset in the base test case's setup function
         UserSettings::set('allow_registration', false);
 
-        $response = $this->post('/api/givingteam/auth', [
+        $response = $this->post('/api/givingteam/auth/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -48,7 +49,7 @@ class AuthControllerTest extends PluginTestCase
     {
         // this should throw a validation error, because there isn't
         // a valid email address, password, confirmation, etc...
-        $response = $this->post('/api/givingteam/auth', [
+        $response = $this->post('/api/givingteam/auth/register', [
             'name' => 'John Doe',
         ]);
 
@@ -62,7 +63,7 @@ class AuthControllerTest extends PluginTestCase
     {
         Event::fake();
 
-        $this->post('/api/givingteam/auth', [
+        $this->post('/api/givingteam/auth/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -80,7 +81,7 @@ class AuthControllerTest extends PluginTestCase
         // enable activation
         UserSettings::set('activate_mode', 'user');
 
-        $response = $this->post('/api/givingteam/auth', [
+        $response = $this->post('/api/givingteam/auth/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -95,7 +96,7 @@ class AuthControllerTest extends PluginTestCase
         UserSettings::set('activation_redirect', 'https://example.com');
 
         // create a user
-        $this->post('/api/givingteam/auth', [
+        $this->post('/api/givingteam/auth/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -125,5 +126,31 @@ class AuthControllerTest extends PluginTestCase
         $response->assertStatus(400);
         $content = $response->getOriginalContent();
         $this->assertEquals('validation_failed', $content['status']);
+    }
+    
+    public function test_fetching_the_authenticated_user()
+    {
+        $this->post('/api/givingteam/auth/register', [
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => 'hello',
+            'password_confirmation' => 'hello',
+        ]);
+
+        $user = User::findByEmail('john@example.com');
+        
+        Auth::login($user);
+
+        // load the user's avatar so we can assert that this was called.
+        // our test doesn't have an avatar though, so this field will
+        // be null. if we didn't have this, it would be undefined.
+        Event::listen('givingteam.auth.afterGetUser', function($user) {
+            $user->load('avatar');
+        });
+
+        $response = $this->get('/api/givingteam/auth/user');
+
+        // and now we should have an avatar field.
+        $this->assertArrayHasKey('avatar', $response->getOriginalContent()->toArray());
     }
 }

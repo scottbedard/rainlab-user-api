@@ -120,6 +120,27 @@ class AccountManager
     }
 
     /**
+     * Get the authenticated user.
+     * 
+     * @return RainLab\User\Models\User
+     */
+    public function getAuthenticatedUser()
+    {
+        if (!Auth::check()) {
+            return null;
+        }
+
+        $user = Auth::getUser();
+
+        // provide a hook for extensibility
+        if ($user) {
+            Event::fire('givingteam.auth.afterGetUser', [&$user]);
+        }
+
+        return $user;
+    }
+
+    /**
      * Determine the user login attribute.
      * 
      * @return boolean
@@ -127,19 +148,6 @@ class AccountManager
     protected function loginAttribute()
     {
         return UserSettings::get('login_attribute', UserSettings::LOGIN_EMAIL);
-    }
-
-    /**
-     * Make an activation url.
-     * 
-     * @param  string   $code
-     * @return string
-     */
-    protected function makeActivationUrl(string $code)
-    {
-        print_r (url('/api/givingteam/auth/activate'));
-
-        return '';
     }
 
     /**
