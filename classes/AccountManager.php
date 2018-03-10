@@ -317,6 +317,22 @@ class AccountManager
     }
 
     /**
+     * Sign the user out.
+     * 
+     * @return void
+     */
+    public function signout()
+    {
+        $user = Auth::getUser();
+
+        Auth::logout();
+        
+        if ($user) {
+            Event::fire('rainlab.user.logout', [$user]);
+        }
+    }
+
+    /**
      * Determine if the user should receive an activation email.
      * 
      * @return boolean

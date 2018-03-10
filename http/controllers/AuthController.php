@@ -128,6 +128,20 @@ class AuthController extends ApiController
     }
 
     /**
+     * Sign a user out.
+     * 
+     * @return Illuminate\Http\Response
+     */
+    public function signout(AccountManager $manager)
+    {
+        $manager->signout();
+
+        return response([
+            'status' => 'success',
+        ], 200);
+    }
+
+    /**
      * Send the user a password reset link.
      * 
      * @return \Illuminate\Http\Response

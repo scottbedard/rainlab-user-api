@@ -246,4 +246,33 @@ class AuthControllerTest extends PluginTestCase
         $response->assertStatus(403);
         $this->assertEquals('authentication_failed', $response->getOriginalContent()['status']);
     }
+
+    public function test_signing_out()
+    {
+        Event::fake();
+
+        // create a user and sign in
+        $this->post('/api/givingteam/auth/register', [
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => 'hello',
+            'password_confirmation' => 'hello',
+        ]);
+
+        Auth::login(User::findByEmail('john@example.com'));
+
+        // quick sanity check to make sure we're actually signed in
+        $this->assertTrue(Auth::check());
+
+        // request the signout route
+        $response = $this->get('/api/givingteam/auth/signout');
+
+        // it should response with a standard success resposne
+        $response->assertStatus(200);
+        $this->assertEquals('success', $response->getOriginalContent()['status']);
+
+        // we should now be signed out and an event should have been fired
+        $this->assertFalse(Auth::check());
+        Event::assertDispatched('rainlab.user.logout');
+    }
 }
