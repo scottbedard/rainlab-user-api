@@ -171,4 +171,9 @@ class AuthControllerTest extends PluginTestCase
             'email' => 'john@example.com',
         ]);
     }
+
+    public function test_resetting_a_users_password()
+    {
+        echo 'hey';
+    }
 }
