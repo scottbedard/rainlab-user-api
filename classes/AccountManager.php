@@ -3,8 +3,10 @@
 use ApplicationException;
 use Auth;
 use Event;
+use GivingTeam\Auth\Exceptions\InvalidUserException;
 use GivingTeam\Auth\Exceptions\RegistrationDisabledException;
 use Mail;
+use RainLab\User\Models\User;
 use RainLab\User\Models\Settings as UserSettings;
 use ValidationException;
 use Validator;
@@ -177,6 +179,51 @@ class AccountManager
 
         Mail::send('rainlab.user::mail.activate', $data, function($message) use ($user) {
             $message->to($user->email, $user->name);
+        });
+    }
+
+    /**
+     * Send the user a password reset link.
+     * 
+     * @param  string   $email
+     * @return void
+     */
+    public function sendResetEmail($email)
+    {
+
+        // validate the request
+        $data = [
+            'email' => $email,
+        ];
+
+        $rules = [
+            'email' => 'required|email|between:6,255'
+        ];
+
+        $validation = Validator::make($data, $rules);
+
+        if ($validation->fails()) {
+            throw new ValidationException($validation);
+        }
+
+        // find the user
+        $user = User::findByEmail($email);
+        
+        if (!$user || $user->is_guest) {
+            throw new InvalidUserException;
+        }
+
+        // and finally, send them a reset link
+        $code = implode('!', [$user->id, $user->getResetPasswordCode()]);
+
+        $data = [
+            'name' => $user->name,
+            'link' => url('api/givingteam/auth/activate?code=' . $code),
+            'code' => $code,
+        ];
+
+        Mail::send('rainlab.user::mail.restore', $data, function($message) use ($user) {
+            $message->to($user->email, $user->full_name);
         });
     }
 

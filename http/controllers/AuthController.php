@@ -1,9 +1,10 @@
 <?php namespace GivingTeam\Auth\Http\Controllers;
 
-use Auth;
 use ApplicationException;
+use Auth;
 use Exception;
 use GivingTeam\Auth\Classes\AccountManager;
+use GivingTeam\Auth\Exceptions\InvalidUserException;
 use GivingTeam\Auth\Exceptions\RegistrationDisabledException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -66,6 +67,32 @@ class AuthController extends Controller
         }
 
         return $user;
+    }
+
+    /**
+     * Send the user a password reset link.
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function sendResetEmail(AccountManager $manager)
+    {
+        try {
+            $data = input();
+
+            $manager->sendResetEmail($data['email']);
+        }
+
+        // invalid user
+        catch (InvalidUserException $e) {
+            return response([
+                'status' => 'invalid_user',
+                'message' => trans('rainlab.user::lang.account.invalid_user'),
+            ], 500);
+        }
+
+        return response([
+            'status' => 'success',
+        ]);
     }
 
     /**

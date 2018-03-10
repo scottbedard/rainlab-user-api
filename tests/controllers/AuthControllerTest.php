@@ -153,4 +153,20 @@ class AuthControllerTest extends PluginTestCase
         // and now we should have an avatar field.
         $this->assertArrayHasKey('avatar', $response->getOriginalContent()->toArray());
     }
+
+    public function test_sending_a_password_reset_link()
+    {
+        Mail::shouldReceive('send')->once();
+
+        $this->post('/api/givingteam/auth/register', [
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => 'hello',
+            'password_confirmation' => 'hello',
+        ]);
+
+        $response = $this->post('/api/givingteam/auth/send-reset-email', [
+            'email' => 'john@example.com',
+        ]);
+    }
 }
