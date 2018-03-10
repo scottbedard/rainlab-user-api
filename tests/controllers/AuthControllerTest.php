@@ -42,7 +42,7 @@ class AuthControllerTest extends PluginTestCase
 
         $content = $response->getOriginalContent();
         $this->assertEquals('disabled', $content['status']);
-        $this->assertEquals('rainlab.user::lang.account.registration_disabled', $content['message']);
+        $this->assertEquals(trans('rainlab.user::lang.account.registration_disabled'), $content['message']);
     }
 
     public function test_creating_a_user_with_invalid_data()
@@ -76,6 +76,7 @@ class AuthControllerTest extends PluginTestCase
 
     public function test_registering_sends_an_activation_email()
     {
+        // Qtodo: improve this assertion
         Mail::shouldReceive('send')->once();
 
         // enable activation
@@ -156,6 +157,7 @@ class AuthControllerTest extends PluginTestCase
 
     public function test_sending_a_password_reset_link()
     {
+        // Qtodo: improve this assertion
         Mail::shouldReceive('send')->once();
 
         $this->post('/api/givingteam/auth/register', [
