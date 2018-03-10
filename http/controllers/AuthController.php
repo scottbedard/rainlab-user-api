@@ -4,15 +4,15 @@ use ApplicationException;
 use Auth;
 use Exception;
 use GivingTeam\Auth\Classes\AccountManager;
+use GivingTeam\Auth\Classes\ApiController;
 use GivingTeam\Auth\Exceptions\InvalidUserException;
 use GivingTeam\Auth\Exceptions\RegistrationDisabledException;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use October\Rain\Auth\AuthException;
 use RainLab\User\Models\Settings as UserSettings;
 use ValidationException;
 
-class AuthController extends Controller
+class AuthController extends ApiController
 {
 
     /**

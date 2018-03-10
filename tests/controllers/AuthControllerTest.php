@@ -152,7 +152,7 @@ class AuthControllerTest extends PluginTestCase
         $response = $this->get('/api/givingteam/auth/user');
 
         // and now we should have an avatar field.
-        $this->assertArrayHasKey('avatar', $response->getOriginalContent()->toArray());
+       $this->assertArrayHasKey('avatar', $response->getOriginalContent()->toArray());
     }
 
     public function test_sending_a_password_reset_link()
