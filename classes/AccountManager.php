@@ -347,10 +347,11 @@ class AccountManager
         // if an avatar is present in the data, attach it
         if (array_key_exists('avatar', $data)) {
             $user->avatar = $data['avatar'];
+            unset ($data['avatar']);
         }
 
         // update the user model
-        $user->fill(input());
+        $user->fill($data);
         $user->save();
 
         // the password has changed, re-authenticate the user
