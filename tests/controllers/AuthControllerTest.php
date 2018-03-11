@@ -287,7 +287,7 @@ class AuthControllerTest extends PluginTestCase
         ]);
 
         // try changing the user's name and email
-        $response = $this->patch('/api/givingteam/auth/user', [
+        $response = $this->post('/api/givingteam/auth/user', [
             'name' => 'Jane Doe',
             'email' => 'jane@example.com',
         ]);
@@ -309,7 +309,7 @@ class AuthControllerTest extends PluginTestCase
         ]);
 
         // change the password to "world"
-        $response = $this->patch('/api/givingteam/auth/user', [
+        $response = $this->post('/api/givingteam/auth/user', [
             'password' => 'world',
             'password_confirmation' => 'world',
         ]);

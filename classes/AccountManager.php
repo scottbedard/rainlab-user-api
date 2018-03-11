@@ -347,7 +347,6 @@ class AccountManager
         // if an avatar is present in the data, attach it
         if (array_key_exists('avatar', $data)) {
             $user->avatar = $data['avatar'];
-            unset($data['avatar']);
         }
 
         // update the user model

@@ -8,6 +8,7 @@ use GivingTeam\Auth\Classes\ApiController;
 use GivingTeam\Auth\Exceptions\InvalidUserException;
 use GivingTeam\Auth\Exceptions\RegistrationDisabledException;
 use Illuminate\Http\Request;
+use Input;
 use October\Rain\Auth\AuthException;
 use RainLab\User\Models\Settings as UserSettings;
 use ValidationException;
@@ -175,6 +176,12 @@ class AuthController extends ApiController
     public function update(AccountManager $manager)
     {
         $data = input();
+
+        $avatar = Input::file('avatar');
+
+        if ($avatar) {
+            $data['avatar'] = $avatar;
+        }
         
         return $manager->update($data);
     }
