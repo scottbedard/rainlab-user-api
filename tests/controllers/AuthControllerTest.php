@@ -212,7 +212,7 @@ class AuthControllerTest extends PluginTestCase
         // just a sanity check, we should be logged out before logging in
         Auth::logout();
 
-        $response = $this->post('/api/givingteam/auth', [
+        $response = $this->post('/api/givingteam/auth/signin', [
             'login' => 'john@example.com',
             'password' => 'hello',
             'remember' => false,
@@ -237,7 +237,7 @@ class AuthControllerTest extends PluginTestCase
         // just a sanity check, we should be logged out before logging in
         Auth::logout();
 
-        $response = $this->post('/api/givingteam/auth', [
+        $response = $this->post('/api/givingteam/auth/signin', [
             'login' => 'john@example.com',
             'password' => 'wrong-password',
             'remember' => false,

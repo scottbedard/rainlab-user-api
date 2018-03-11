@@ -3,12 +3,12 @@
 Route::prefix('api/givingteam/auth')->middleware('web')->group(function() {
 
     // public routes
-    Route::post('/', 'GivingTeam\Auth\Http\Controllers\AuthController@authenticate');
     Route::any('signout', 'GivingTeam\Auth\Http\Controllers\AuthController@signout');
     Route::get('activate', 'GivingTeam\Auth\Http\Controllers\AuthController@activate');
     Route::post('register', 'GivingTeam\Auth\Http\Controllers\AuthController@register');
     Route::post('reset-password', 'GivingTeam\Auth\Http\Controllers\AuthController@resetPassword');
     Route::post('send-reset-email', 'GivingTeam\Auth\Http\Controllers\AuthController@sendResetEmail');
+    Route::post('signin', 'GivingTeam\Auth\Http\Controllers\AuthController@authenticate');
 
     // authenticated routes
     Route::group(['middleware' => 'RainLab\User\Classes\AuthMiddleware'], function () {
