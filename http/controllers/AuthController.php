@@ -168,6 +168,18 @@ class AuthController extends ApiController
     }
 
     /**
+     * Update the user's account.
+     * 
+     * @return Response
+     */
+    public function update(AccountManager $manager)
+    {
+        $data = input();
+        
+        return $manager->update($data);
+    }
+
+    /**
      * Get the currently authenticated user.
      * 
      * @return Response

@@ -13,5 +13,6 @@ Route::prefix('api/givingteam/auth')->middleware('web')->group(function() {
     // authenticated routes
     Route::group(['middleware' => 'RainLab\User\Classes\AuthMiddleware'], function () {
         Route::get('user', 'GivingTeam\Auth\Http\Controllers\AuthController@user');
+        Route::patch('user', 'GivingTeam\Auth\Http\Controllers\AuthController@update');
     });
 });

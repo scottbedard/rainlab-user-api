@@ -333,6 +333,36 @@ class AccountManager
     }
 
     /**
+     * Update the authenticated user.
+     * 
+     * @return RainLab\User\Models\User
+     */
+    public function update(array $data)
+    {
+        // make sure the user is signed in
+        if (!$user = Auth::getUser()) {
+            throw new AuthException;
+        }
+
+        // if an avatar is present in the data, attach it
+        if (array_key_exists('avatar', $data)) {
+            $user->avatar = $data['avatar'];
+            unset($data['avatar']);
+        }
+
+        // update the user model
+        $user->fill(input());
+        $user->save();
+
+        // the password has changed, re-authenticate the user
+        if (array_key_exists('password', $data)) {
+            Auth::login($user->reload(), true);
+        }
+        
+        return self::getAuthenticatedUser();
+    }
+
+    /**
      * Determine if the user should receive an activation email.
      * 
      * @return boolean

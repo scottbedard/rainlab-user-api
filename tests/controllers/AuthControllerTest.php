@@ -275,4 +275,48 @@ class AuthControllerTest extends PluginTestCase
         $this->assertFalse(Auth::check());
         Event::assertDispatched('rainlab.user.logout');
     }
+    
+    public function test_updating_a_user()
+    {
+        // create a user
+        $this->post('/api/givingteam/auth/register', [
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => 'hello',
+            'password_confirmation' => 'hello',
+        ]);
+
+        // try changing the user's name and email
+        $response = $this->patch('/api/givingteam/auth/user', [
+            'name' => 'Jane Doe',
+            'email' => 'jane@example.com',
+        ]);
+
+        // the name and email should now be changed
+        $user = $response->getOriginalContent();
+        $this->assertEquals('Jane Doe', $user->name);
+        $this->assertEquals('jane@example.com', $user->email);
+    }
+
+    public function test_updating_a_users_password()
+    {
+        // create a user with the password "hello"
+        $this->post('/api/givingteam/auth/register', [
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => 'hello',
+            'password_confirmation' => 'hello',
+        ]);
+
+        // change the password to "world"
+        $response = $this->patch('/api/givingteam/auth/user', [
+            'password' => 'world',
+            'password_confirmation' => 'world',
+        ]);
+
+        // the password should now be updated and the user returned
+        $user = Auth::getUser();
+        $this->assertTrue($user->checkPassword('world'));
+        $this->assertEquals('john@example.com', $response->getOriginalContent()->email);
+    }
 }
