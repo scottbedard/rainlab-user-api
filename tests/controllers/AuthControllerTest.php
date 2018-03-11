@@ -319,4 +319,25 @@ class AuthControllerTest extends PluginTestCase
         $this->assertTrue($user->checkPassword('world'));
         $this->assertEquals('john@example.com', $response->getOriginalContent()->email);
     }
+
+    public function test_updating_user_info_while_not_authenticated()
+    {
+        // create a user
+        $this->post('/api/givingteam/auth/register', [
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => 'hello',
+            'password_confirmation' => 'hello',
+        ]);
+
+        // make sure we're not logged in
+        Auth::logout();
+
+        $response = $this->post('/api/givingteam/auth/user', [
+            'password' => 'world',
+            'password_confirmation' => 'world',
+        ]);
+
+        $response->assertStatus(403);
+    }
 }

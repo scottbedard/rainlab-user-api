@@ -175,15 +175,41 @@ class AuthController extends ApiController
      */
     public function update(AccountManager $manager)
     {
-        $data = input();
+        // attempt to update the user
+        try {
+            $data = input();
 
-        $avatar = Input::file('avatar');
+            if (Input::hasFile('avatar')) {
+                $data['avatar'] = Input::file('avatar');
+            }
 
-        if ($avatar) {
-            $data['avatar'] = $avatar;
+            $user = $manager->update($data);
         }
-        
-        return $manager->update($data);
+
+        // authentication error
+        catch (AuthException $e) {
+            return response([
+                'status' => 'unauthorized',
+            ], 403);
+        }
+
+        // validation error
+        catch (ValidationException $e) {
+            return response([
+                'status' => 'validation_failed',
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+
+        // unknown error
+        catch (Exception $e) {
+            return response([
+                'status' => 'failed',
+                'message' => $e->getMessage(),
+            ]);
+        }
+
+        return $user;
     }
 
     /**
