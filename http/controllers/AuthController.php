@@ -10,6 +10,7 @@ use GivingTeam\Auth\Exceptions\RegistrationDisabledException;
 use Illuminate\Http\Request;
 use Input;
 use October\Rain\Auth\AuthException;
+use October\Rain\Database\ModelException;
 use RainLab\User\Models\Settings as UserSettings;
 use ValidationException;
 
@@ -93,6 +94,13 @@ class AuthController extends ApiController
         }
 
         // registration is not valid
+        catch (ModelException $e) {
+            return response([
+                'status' => 'validation_failed',
+                'message' => $e->getMessage(),
+            ], 400);
+        } 
+        
         catch (ValidationException $e) {
             return response([
                 'status' => 'validation_failed',
@@ -166,6 +174,31 @@ class AuthController extends ApiController
         return response([
             'status' => 'success',
         ]);
+    }
+
+    /**
+     * Stop impersonating a user
+     * 
+     * @return Illuminate\Http\Response
+     */
+    public function stopImpersonating(AccountManager $manager)
+    {
+        // sign out if we're not impersonating anyone
+        try {
+            $manager->stopImpersonating();
+        }
+
+        // unknown error
+        catch (Exception $e) {
+            return response([
+                'status' => 'failed',
+                'message' => $e->getMessage(),
+            ]);
+        }
+
+        return response([
+            'status' => 'success',
+        ], 200);
     }
 
     /**

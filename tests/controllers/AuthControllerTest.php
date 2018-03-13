@@ -340,4 +340,28 @@ class AuthControllerTest extends PluginTestCase
 
         $response->assertStatus(403);
     }
+
+    public function test_stopping_impersonation_of_a_user()
+    {
+        // create a user
+        $this->post('/api/givingteam/auth/register', [
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => 'hello',
+            'password_confirmation' => 'hello',
+        ]);
+
+        // impersonate that user
+        $user = User::findByEmail('john@example.com');
+        Auth::impersonate($user);
+
+        // quick sanity check to make sure we're actually impersonating someone
+        $this->assertTrue(Auth::isImpersonator());
+
+        // last, hit our endpoint and verify that we're no longer impersonating anyone
+        $response = $this->get('/api/givingteam/auth/stop-impersonating');
+        $response->assertStatus(200);
+        
+        $this->assertFalse(Auth::isImpersonator());
+    }
 }

@@ -333,6 +333,20 @@ class AccountManager
     }
 
     /**
+     * Stop impersonating a user.
+     * 
+     * @return void
+     */
+    public function stopImpersonating()
+    {
+        if (!Auth::isImpersonator()) {
+            $this->signout();
+        }
+
+        Auth::stopImpersonate();
+    }
+
+    /**
      * Update the authenticated user.
      * 
      * @return RainLab\User\Models\User
