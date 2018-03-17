@@ -3,6 +3,7 @@
 use ApplicationException;
 use Auth;
 use Event;
+use GivingTeam\Auth\Exceptions\InvalidResetCodeException;
 use GivingTeam\Auth\Exceptions\InvalidUserException;
 use GivingTeam\Auth\Exceptions\RegistrationDisabledException;
 use Mail;
@@ -183,6 +184,26 @@ class AccountManager
         }
 
         return $user;
+    }
+
+    /**
+     * Get a user by a password reset code.
+     * 
+     * @return RainLab\User\Models\User
+     */
+    public function getUserByResetCode($code)
+    {
+        $parts = explode('!', $code);
+
+        if (count($parts) != 2) {
+            throw new InvalidResetCodeException;
+        }
+
+        list($userId, $code) = $parts;
+
+        return User::where('reset_password_code', $code)
+            ->where('id', $userId)
+            ->firstOrFail();
     }
 
     /**

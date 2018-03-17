@@ -73,6 +73,27 @@ class AuthController extends ApiController
     }
 
     /**
+     * Fetch a user by their password reset code.
+     * 
+     * @return \Illuminate\Http\Resonse
+     */
+    public function getUserByResetCode(AccountManager $manager)
+    {
+        try {
+            $user = $manager->getUserByResetCode(input('code'));
+        }
+
+        catch (Exception $e) {
+            return response([
+                'status' => 'failed',
+                'message' => $e->getMessage(),
+            ]);
+        }
+
+        return $user;
+    }
+
+    /**
      * Register a user.
      * 
      * @return \Illuminate\Http\Response

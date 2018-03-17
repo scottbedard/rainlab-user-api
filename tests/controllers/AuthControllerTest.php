@@ -298,6 +298,24 @@ class AuthControllerTest extends PluginTestCase
         $this->assertEquals('jane@example.com', $user->email);
     }
 
+    public function test_getting_a_user_by_their_reset_password_code()
+    {
+        // create a user
+        $this->post('/api/givingteam/auth/register', [
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => 'hello',
+            'password_confirmation' => 'hello',
+        ]);
+
+        // fetch the user by their reset password code
+        $user = User::findByEmail('john@example.com');
+
+        $response = $this->get('/api/givingteam/auth/reset-password?code=' . $user->id . '!' . $user->getResetPasswordCode());
+
+        $this->assertEquals('John Doe', $response->getOriginalContent()->name);
+    }
+
     public function test_updating_a_users_password()
     {
         // create a user with the password "hello"

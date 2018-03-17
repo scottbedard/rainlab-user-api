@@ -6,6 +6,7 @@ Route::prefix('api/givingteam/auth')->middleware('web')->group(function() {
     Route::any('signout', 'GivingTeam\Auth\Http\Controllers\AuthController@signout');
     Route::any('stop-impersonating', 'GivingTeam\Auth\Http\Controllers\AuthController@stopImpersonating');
     Route::get('activate', 'GivingTeam\Auth\Http\Controllers\AuthController@activate');
+    Route::get('reset-password', 'GivingTeam\Auth\Http\Controllers\AuthController@getUserByResetCode');
     Route::post('register', 'GivingTeam\Auth\Http\Controllers\AuthController@register');
     Route::post('reset-password', 'GivingTeam\Auth\Http\Controllers\AuthController@resetPassword');
     Route::post('send-reset-email', 'GivingTeam\Auth\Http\Controllers\AuthController@sendResetEmail');
