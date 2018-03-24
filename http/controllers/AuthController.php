@@ -29,12 +29,9 @@ class AuthController extends ApiController
             $manager->activate(input('code'));
         }
 
-        // invalid activation code
+        // validation failed
         catch (ValidationException $e) {
-            return response([
-                'status' => 'validation_failed',
-                'message' => $e->getMessage(),
-            ], 400);
+            return $this->validationError($e);
         }
 
         return redirect(UserSettings::get('activation_redirect', url()));
@@ -55,16 +52,13 @@ class AuthController extends ApiController
 
         // validation failed
         catch (ValidationException $e) {
-            return response([
-                'status' => 'validation_failed',
-                'message' => $e->getMessage(),
-            ], 400);
+            return $this->validationError($e);
         }
 
         // authentication failed
         catch (AuthException $e) {
             return response([
-                'status' => 'authentication_failed',
+                'status' => 'failed',
                 'message' => $e->getMessage(),
             ], 403);
         }
@@ -122,11 +116,9 @@ class AuthController extends ApiController
             ], 400);
         } 
         
+        // validation failed
         catch (ValidationException $e) {
-            return response([
-                'status' => 'validation_failed',
-                'message' => $e->getMessage(),
-            ], 400);
+            return $this->validationError($e);
         }
 
         return $user;
@@ -144,12 +136,9 @@ class AuthController extends ApiController
             $manager->resetPassword(input());
         }
 
-        // invalid
+        // validation failed
         catch (ValidationException $e) {
-            return response([
-                'status' => 'validation_failed',
-                'message' => $e->getMessage(),
-            ], 500);
+            return $this->validationError($e);
         }
 
         return response([
@@ -247,12 +236,9 @@ class AuthController extends ApiController
             ], 403);
         }
 
-        // validation error
+        // validation failed
         catch (ValidationException $e) {
-            return response([
-                'status' => 'validation_failed',
-                'message' => $e->getMessage(),
-            ], 400);
+            return $this->validationError($e);
         }
 
         // unknown error

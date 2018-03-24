@@ -2,6 +2,7 @@
 
 use Illuminate\Routing\Controller;
 use Closure;
+use ValidationException;
 
 class ApiController extends Controller
 {
@@ -28,5 +29,17 @@ class ApiController extends Controller
     public static function extend(Closure $callback)
     {
         self::extendableExtendCallback($callback);
+    }
+
+    /**
+     * Return a validation error.
+     * 
+     * @return Response
+     */
+    protected function validationError(ValidationException $e) {
+        return response([
+            'status' => 'invalid',
+            'errors' => $e->getFields(),
+        ], 400);
     }
 }

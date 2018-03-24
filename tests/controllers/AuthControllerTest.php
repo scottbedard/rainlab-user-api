@@ -56,7 +56,7 @@ class AuthControllerTest extends PluginTestCase
         $response->assertStatus(400);
 
         $content = $response->getOriginalContent();
-        $this->assertEquals('validation_failed', $content['status']);
+        $this->assertEquals('invalid', $content['status']);
     }
 
     public function test_rainlab_user_events_are_fired()
@@ -126,7 +126,7 @@ class AuthControllerTest extends PluginTestCase
         
         $response->assertStatus(400);
         $content = $response->getOriginalContent();
-        $this->assertEquals('validation_failed', $content['status']);
+        $this->assertEquals('invalid', $content['status']);
     }
     
     public function test_fetching_the_authenticated_user()
@@ -244,7 +244,7 @@ class AuthControllerTest extends PluginTestCase
         ]);
 
         $response->assertStatus(403);
-        $this->assertEquals('authentication_failed', $response->getOriginalContent()['status']);
+        $this->assertEquals('failed', $response->getOriginalContent()['status']);
     }
 
     public function test_signing_out()
