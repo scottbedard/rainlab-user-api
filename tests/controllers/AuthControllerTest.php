@@ -382,4 +382,32 @@ class AuthControllerTest extends PluginTestCase
         
         $this->assertFalse(Auth::isImpersonator());
     }
+
+    public function test_updating_email_to_a_taken_email()
+    {
+        // create our first user
+        $this->post('/api/givingteam/auth/register', [
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => 'hello',
+            'password_confirmation' => 'hello',
+        ]);
+
+        // create a second user
+        $this->post('/api/givingteam/auth/register', [
+            'email' => 'jane@example.com',
+            'name' => 'Jane Doe',
+            'password' => 'hello',
+            'password_confirmation' => 'hello',
+        ]);
+
+        // try to change our second user's email to the first
+        $response = $this->post('/api/givingteam/auth/user', [
+            'email' => 'john@example.com',
+        ]);
+
+        // and we should get the following error
+        $response->assertStatus(500);
+        $this->assertEquals('email_taken', $response->getOriginalContent()['status']);
+    }
 }

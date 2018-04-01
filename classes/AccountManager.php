@@ -6,6 +6,7 @@ use Event;
 use GivingTeam\Auth\Exceptions\InvalidResetCodeException;
 use GivingTeam\Auth\Exceptions\InvalidUserException;
 use GivingTeam\Auth\Exceptions\RegistrationDisabledException;
+use GivingTeam\Auth\Exceptions\EmailTakenException;
 use Mail;
 use October\Rain\Auth\AuthException;
 use RainLab\User\Models\Settings as UserSettings;
@@ -141,6 +142,14 @@ class AccountManager
 
         if ($validation->fails()) {
             throw new ValidationException($validation);
+        }
+
+        // make sure the email is available
+        if (
+            array_key_exists('email', $data) && 
+            User::whereEmail($data['email'])->exists()
+        ) {
+            throw new EmailTakenException;
         }
 
         // create the new account
@@ -377,6 +386,15 @@ class AccountManager
         // make sure the user is signed in
         if (!$user = Auth::getUser()) {
             throw new AuthException;
+        }
+
+        // if the user is updating their email, make sure it's available
+        if (
+            array_key_exists('email', $data) &&
+            $data['email'] !== $user->email &&
+            User::whereEmail($data['email'])->exists()
+        ) {
+            throw new EmailTakenException;
         }
 
         // if an avatar is present in the data, attach it

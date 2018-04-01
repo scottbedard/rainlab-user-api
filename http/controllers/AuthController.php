@@ -5,6 +5,7 @@ use Auth;
 use Exception;
 use GivingTeam\Auth\Classes\AccountManager;
 use GivingTeam\Auth\Classes\ApiController;
+use GivingTeam\Auth\Exceptions\EmailTakenException;
 use GivingTeam\Auth\Exceptions\InvalidUserException;
 use GivingTeam\Auth\Exceptions\RegistrationDisabledException;
 use Illuminate\Http\Request;
@@ -107,19 +108,26 @@ class AuthController extends ApiController
                 'message' => trans('rainlab.user::lang.account.registration_disabled'),
             ], 403);
         }
-
-        // registration is not valid
-        catch (ModelException $e) {
-            return response([
-                'status' => 'validation_failed',
-                'message' => $e->getMessage(),
-            ], 400);
-        } 
         
         // validation failed
         catch (ValidationException $e) {
             return $this->validationError($e);
         }
+
+        // email address is taken
+        catch (EmailTakenException $e) {
+            return response([
+                'status' => 'email_taken',
+            ], 500);
+        }
+
+        // unknown error
+        catch (Exception $e) {
+            return response([
+                'status' => 'failed',
+                'message' => $e->getMessage(),
+            ], 500);
+        } 
 
         return $user;
     }
@@ -234,6 +242,13 @@ class AuthController extends ApiController
             return response([
                 'status' => 'unauthorized',
             ], 403);
+        }
+
+        // email address is taken
+        catch (EmailTakenException $e) {
+            return response([
+                'status' => 'email_taken',
+            ], 500);
         }
 
         // validation failed
