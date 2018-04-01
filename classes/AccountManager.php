@@ -226,6 +226,16 @@ class AccountManager
     }
 
     /**
+     * Get the password reset URL.
+     * 
+     * @return string
+     */
+    protected function passwordResetUrl()
+    {
+        return UserSettings::get('password_reset_url');
+    }
+
+    /**
      * Determine if activation is required.
      * 
      * @return boolean
@@ -339,6 +349,7 @@ class AccountManager
         $data = [
             'name' => $user->name,
             'code' => $code,
+            'link' => $this->passwordResetUrl() . '?code=' . $code,
         ];
 
         Mail::send('rainlab.user::mail.restore', $data, function($message) use ($user) {

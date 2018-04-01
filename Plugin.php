@@ -56,12 +56,20 @@ class Plugin extends PluginBase
             }
 
             $widget->addTabFields([
+                // password reset url
+                'password_reset_url' => [
+                    'comment'   => 'givingteam.auth::lang.settings.password_reset_url_comment',
+                    'label'     => 'givingteam.auth::lang.settings.password_reset_url_label',
+                    'span'      => 'left',
+                    'tab'       => 'API',
+                ],
+
                 // activation redirect
                 'activation_redirect' => [
                     'comment'   => 'givingteam.auth::lang.settings.activation_redirect_comment',
                     'label'     => 'givingteam.auth::lang.settings.activation_redirect_label',
                     'span'      => 'left',
-                    'tab'       => 'rainlab.user::lang.settings.activation_tab',
+                    'tab'       => 'API',
                 ],
             ]);
         });
