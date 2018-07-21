@@ -17,8 +17,6 @@ class AuthControllerTest extends PluginTestCase
             'password' => 'hello',
             'password_confirmation' => 'hello',
         ]);
-        
-        print_r ($response->getContent());
 
         $response->assertStatus(200);
 
