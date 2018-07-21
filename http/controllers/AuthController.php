@@ -67,11 +67,15 @@ class AuthController extends ApiController
         return $user;
     }
 
+    /**
+     * Delete a user's avatar
+     * 
+     * @return array
+     */
     public function deleteAvatar()
     {
         try {
-            $user = Auth::getUser();
-            $user->avatar()->delete();
+            Auth::getUser()->avatar()->delete();
         } catch(Exception $e) {
             return response([
                 'message' => $e->getMessage(),
@@ -79,10 +83,7 @@ class AuthController extends ApiController
             ], 500);
         }
 
-        return response([
-            'status' => 'success',
-            'user' => $user,
-        ]);
+        return response(['status' => 'success']);
     }
 
     /**
