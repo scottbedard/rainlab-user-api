@@ -76,13 +76,11 @@ class AuthController extends ApiController
     {
         try {
             $user = $manager->getUserByResetCode(input('code'));
-        }
-
-        catch (Exception $e) {
+        } catch (Exception $e) {
             return response([
                 'status' => 'failed',
                 'message' => $e->getMessage(),
-            ]);
+            ], 500);
         }
 
         return $user;

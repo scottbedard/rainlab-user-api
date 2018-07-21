@@ -316,6 +316,13 @@ class AuthControllerTest extends PluginTestCase
         $this->assertEquals('John Doe', $response->getOriginalContent()->name);
     }
 
+    public function test_getting_a_user_by_invalid_reset_code()
+    {
+        $response = $this->get('/api/givingteam/auth/reset-password?code=1!abc');
+
+        $response->assertStatus(500);
+    }
+
     public function test_updating_a_users_password()
     {
         // create a user with the password "hello"
