@@ -67,6 +67,24 @@ class AuthController extends ApiController
         return $user;
     }
 
+    public function deleteAvatar()
+    {
+        try {
+            $user = Auth::getUser();
+            $user->avatar()->delete();
+        } catch(Exception $e) {
+            return response([
+                'message' => $e->getMessage(),
+                'status' => 'failed',
+            ], 500);
+        }
+
+        return response([
+            'status' => 'success',
+            'user' => $user,
+        ]);
+    }
+
     /**
      * Fetch a user by their password reset code.
      * 

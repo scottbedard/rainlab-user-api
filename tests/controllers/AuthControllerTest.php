@@ -417,4 +417,26 @@ class AuthControllerTest extends PluginTestCase
         $response->assertStatus(500);
         $this->assertEquals('email_taken', $response->getOriginalContent()['status']);
     }
+
+    public function test_deleting_a_users_avatar()
+    {
+        // create a user with an avatar
+        $this->post('/api/givingteam/auth/register', [
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => 'hello',
+            'password_confirmation' => 'hello',
+        ]);
+
+        $user = Auth::getUser();
+        $user->avatar()->create(['data' => plugins_path('givingteam/auth/tests/avatar.png')]);
+        
+        // make sure our user has an avatar to prevent false positives
+        $this->assertEquals('avatar.png', User::find($user->id)->avatar->file_name);
+
+        // submit a request to remove the avatar
+        $response = $this->delete('/api/givingteam/auth/user/avatar');
+        $response->assertStatus(200);
+        $this->assertNull(User::with('avatar')->find($user->id)->avatar);
+    }
 }

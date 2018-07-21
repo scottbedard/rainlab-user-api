@@ -16,5 +16,6 @@ Route::prefix('api/givingteam/auth')->middleware('web')->group(function() {
     Route::group(['middleware' => 'RainLab\User\Classes\AuthMiddleware'], function () {
         Route::get('user', 'GivingTeam\Auth\Http\Controllers\AuthController@user');
         Route::post('user', 'GivingTeam\Auth\Http\Controllers\AuthController@update');
+        Route::delete('user/avatar', 'GivingTeam\Auth\Http\Controllers\AuthController@deleteAvatar');
     });
 });
