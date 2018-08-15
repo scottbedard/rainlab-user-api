@@ -1,6 +1,7 @@
 <?php namespace GivingTeam\Auth\Tests\Controllers;
 
 use Auth;
+use Carbon\Carbon;
 use Event;
 use Mail;
 use GivingTeam\Auth\Tests\PluginTestCase;
@@ -209,6 +210,13 @@ class AuthControllerTest extends PluginTestCase
             'password_confirmation' => 'hello',
         ]);
 
+        // manually set our created at timestamp to yesterday so we aren't
+        // considered online when we log in. this will let the last_seen
+        // timestamp be touched.
+        $user = User::whereEmail('john@example.com')->first();
+        $user->created_at = Carbon::yesterday();
+        $user->save();
+
         // just a sanity check, we should be logged out before logging in
         Auth::logout();
 
@@ -222,6 +230,10 @@ class AuthControllerTest extends PluginTestCase
         $this->assertEquals('john@example.com', $response->getOriginalContent()->email);
         $this->assertEquals('john@example.com', Auth::getUser()->email);
         $this->assertTrue(Auth::check());
+
+        // user assertions
+        $user = User::whereEmail('john@example.com')->first();
+        $this->assertNotNull($user->last_seen);
     }
 
     public function test_authentication_with_incorrect_credentials()

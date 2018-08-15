@@ -187,6 +187,8 @@ class AccountManager
 
         $user = Auth::getUser();
 
+        $user->touchLastSeen();
+
         // provide a hook for extensibility
         if ($user) {
             Event::fire('givingteam.auth.afterGetUser', [&$user]);
