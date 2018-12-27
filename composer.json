@@ -5,7 +5,7 @@
         }
     },
     "license": "MIT",
-    "name": "vuetober/rainlabuserapi",
+    "name": "vuetober/rainlab-user-api",
     "type": "october-plugin",
     "require": {},
     "require-dev": {
