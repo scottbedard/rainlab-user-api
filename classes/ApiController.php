@@ -1,4 +1,6 @@
-<?php namespace GivingTeam\Auth\Classes;
+<?php
+
+namespace Vuetober\RainLabUserApi\Classes;
 
 use Illuminate\Routing\Controller;
 use Closure;

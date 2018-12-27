@@ -1,4 +1,6 @@
-<?php namespace GivingTeam\Auth\Tests;
+<?php
+
+namespace Vuetober\RainLabUserApi\Tests;
 
 use App;
 use Artisan;
