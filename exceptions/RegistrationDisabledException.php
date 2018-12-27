@@ -1,6 +1,4 @@
-<?php
-
-namespace Vuetober\RainLabUserApi\Exceptions;
+<?php namespace GivingTeam\Auth\Exceptions;
 
 use October\Rain\Exception\ExceptionBase;
 

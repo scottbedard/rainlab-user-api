@@ -1,11 +1,9 @@
-<?php
-
-namespace Vuetober\RainLabUserApi;
+<?php namespace GivingTeam\Auth;
 
 use Backend;
 use Event;
-use RainLab\User\Models\Settings;
 use System\Classes\PluginBase;
+use RainLab\User\Models\Settings as UserSettings;
 
 /**
  * Auth Plugin Information File
@@ -13,9 +11,7 @@ use System\Classes\PluginBase;
 class Plugin extends PluginBase
 {
     /**
-     * Dependencies.
-     *
-     * @var array
+     * @var array   Dependencies
      */
     public $require = [
         'RainLab.User',
@@ -29,11 +25,21 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'author' => 'Vuetober',
-            'description' => 'An HTTP API for RainLab.User',
-            'icon' => 'icon-leaf',
-            'name' => 'RainLab.User API',
+            'name'        => 'Auth',
+            'description' => 'No description provided yet...',
+            'author'      => 'GivingTeam',
+            'icon'        => 'icon-leaf'
         ];
+    }
+
+    /**
+     * Register method, called when the plugin is first registered.
+     *
+     * @return void
+     */
+    public function register()
+    {
+
     }
 
     /**
@@ -45,23 +51,23 @@ class Plugin extends PluginBase
     {
         // extend the rainlab.user settings model
         Event::listen('backend.form.extendFields', function($widget) {
-            if (!$widget->model instanceof Settings) {
+            if (!$widget->model instanceof UserSettings) {
                 return;
             }
 
             $widget->addTabFields([
                 // password reset url
                 'password_reset_url' => [
-                    'comment'   => 'vuetober.rainlabuserapi::lang.settings.password_reset_url_comment',
-                    'label'     => 'vuetober.rainlabuserapi::lang.settings.password_reset_url_label',
+                    'comment'   => 'givingteam.auth::lang.settings.password_reset_url_comment',
+                    'label'     => 'givingteam.auth::lang.settings.password_reset_url_label',
                     'span'      => 'left',
                     'tab'       => 'API',
                 ],
 
                 // activation redirect
                 'activation_redirect' => [
-                    'comment'   => 'vuetober.rainlabuserapi::lang.settings.activation_redirect_comment',
-                    'label'     => 'vuetober.rainlabuserapi::lang.settings.activation_redirect_label',
+                    'comment'   => 'givingteam.auth::lang.settings.activation_redirect_comment',
+                    'label'     => 'givingteam.auth::lang.settings.activation_redirect_label',
                     'span'      => 'left',
                     'tab'       => 'API',
                 ],

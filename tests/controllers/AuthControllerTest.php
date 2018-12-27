@@ -1,12 +1,10 @@
-<?php
-
-namespace Vuetober\RainLabUserApi\Tests\Controllers;
+<?php namespace GivingTeam\Auth\Tests\Controllers;
 
 use Auth;
 use Carbon\Carbon;
 use Event;
 use Mail;
-use Vuetober\RainLabUserApi\Tests\PluginTestCase;
+use GivingTeam\Auth\Tests\PluginTestCase;
 use RainLab\User\Models\User;
 use RainLab\User\Models\Settings as UserSettings;
 

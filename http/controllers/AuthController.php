@@ -1,15 +1,13 @@
-<?php
-
-namespace Vuetober\RainLabUserApi\Http\Controllers;
+<?php namespace GivingTeam\Auth\Http\Controllers;
 
 use ApplicationException;
 use Auth;
 use Exception;
-use Vuetober\RainLabUserApi\Classes\AccountManager;
-use Vuetober\RainLabUserApi\Classes\ApiController;
-use Vuetober\RainLabUserApi\Exceptions\EmailTakenException;
-use Vuetober\RainLabUserApi\Exceptions\InvalidUserException;
-use Vuetober\RainLabUserApi\Exceptions\RegistrationDisabledException;
+use GivingTeam\Auth\Classes\AccountManager;
+use GivingTeam\Auth\Classes\ApiController;
+use GivingTeam\Auth\Exceptions\EmailTakenException;
+use GivingTeam\Auth\Exceptions\InvalidUserException;
+use GivingTeam\Auth\Exceptions\RegistrationDisabledException;
 use Illuminate\Http\Request;
 use Input;
 use October\Rain\Auth\AuthException;
