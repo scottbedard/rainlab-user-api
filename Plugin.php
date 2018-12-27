@@ -1,4 +1,6 @@
-<?php namespace GivingTeam\Auth;
+<?php
+
+namespace Vuetober\RainLabUserApi;
 
 use Backend;
 use Event;

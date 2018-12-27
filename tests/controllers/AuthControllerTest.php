@@ -1,10 +1,12 @@
-<?php namespace GivingTeam\Auth\Tests\Controllers;
+<?php
+
+namespace Vuetober\RainLabUserApi\Tests\Controllers;
 
 use Auth;
 use Carbon\Carbon;
 use Event;
 use Mail;
-use GivingTeam\Auth\Tests\PluginTestCase;
+use Vuetober\RainLabUserApi\Tests\PluginTestCase;
 use RainLab\User\Models\User;
 use RainLab\User\Models\Settings as UserSettings;
 
@@ -441,7 +443,7 @@ class AuthControllerTest extends PluginTestCase
         ]);
 
         $user = Auth::getUser();
-        $user->avatar()->create(['data' => plugins_path('givingteam/auth/tests/avatar.png')]);
+        $user->avatar()->create(['data' => plugins_path('vuetober/rainlabuserapi/tests/avatar.png')]);
         
         // make sure our user has an avatar to prevent false positives
         $this->assertEquals('avatar.png', User::find($user->id)->avatar->file_name);

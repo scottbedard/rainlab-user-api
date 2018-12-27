@@ -1,12 +1,14 @@
-<?php namespace GivingTeam\Auth\Classes;
+<?php
+
+namespace Vuetober\RainLabUserApi\Classes;
 
 use ApplicationException;
 use Auth;
 use Event;
-use GivingTeam\Auth\Exceptions\InvalidResetCodeException;
-use GivingTeam\Auth\Exceptions\InvalidUserException;
-use GivingTeam\Auth\Exceptions\RegistrationDisabledException;
-use GivingTeam\Auth\Exceptions\EmailTakenException;
+use Vuetober\RainLabUserApi\Exceptions\InvalidResetCodeException;
+use Vuetober\RainLabUserApi\Exceptions\InvalidUserException;
+use Vuetober\RainLabUserApi\Exceptions\RegistrationDisabledException;
+use Vuetober\RainLabUserApi\Exceptions\EmailTakenException;
 use Mail;
 use October\Rain\Auth\AuthException;
 use RainLab\User\Models\Settings as UserSettings;
