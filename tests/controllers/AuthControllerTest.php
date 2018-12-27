@@ -14,7 +14,7 @@ class AuthControllerTest extends PluginTestCase
 {
     public function test_creating_a_new_user()
     {
-        $response = $this->post('/api/givingteam/auth/register', [
+        $response = $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -34,7 +34,7 @@ class AuthControllerTest extends PluginTestCase
         // reset in the base test case's setup function
         UserSettings::set('allow_registration', false);
 
-        $response = $this->post('/api/givingteam/auth/register', [
+        $response = $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -52,7 +52,7 @@ class AuthControllerTest extends PluginTestCase
     {
         // this should throw a validation error, because there isn't
         // a valid email address, password, confirmation, etc...
-        $response = $this->post('/api/givingteam/auth/register', [
+        $response = $this->post('/api/rainlab/user/register', [
             'name' => 'John Doe',
         ]);
 
@@ -66,7 +66,7 @@ class AuthControllerTest extends PluginTestCase
     {
         Event::fake();
 
-        $this->post('/api/givingteam/auth/register', [
+        $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -85,7 +85,7 @@ class AuthControllerTest extends PluginTestCase
         // enable activation
         UserSettings::set('activate_mode', 'user');
 
-        $response = $this->post('/api/givingteam/auth/register', [
+        $response = $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -100,7 +100,7 @@ class AuthControllerTest extends PluginTestCase
         UserSettings::set('activation_redirect', 'https://example.com');
 
         // create a user
-        $this->post('/api/givingteam/auth/register', [
+        $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -113,7 +113,7 @@ class AuthControllerTest extends PluginTestCase
 
         // activate the user
         $code = implode('!', [$user->id, $user->getActivationCode()]);
-        $response = $this->get('/api/givingteam/auth/activate?code=' . $code);
+        $response = $this->get('/api/rainlab/user/activate?code=' . $code);
 
         // verify that the user is now activated
         $user->reload();
@@ -125,7 +125,7 @@ class AuthControllerTest extends PluginTestCase
 
     public function test_activating_with_an_invalid_code()
     {
-        $response = $this->get('/api/givingteam/auth/activate?code=123');
+        $response = $this->get('/api/rainlab/user/activate?code=123');
         
         $response->assertStatus(400);
         $content = $response->getOriginalContent();
@@ -134,7 +134,7 @@ class AuthControllerTest extends PluginTestCase
     
     public function test_fetching_the_authenticated_user()
     {
-        $this->post('/api/givingteam/auth/register', [
+        $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -152,7 +152,7 @@ class AuthControllerTest extends PluginTestCase
             $user->load('avatar');
         });
 
-        $response = $this->get('/api/givingteam/auth/user');
+        $response = $this->get('/api/rainlab/user/user');
 
         // and now we should have an avatar field.
        $this->assertArrayHasKey('avatar', $response->getOriginalContent()->toArray());
@@ -163,14 +163,14 @@ class AuthControllerTest extends PluginTestCase
         // Qtodo: improve this assertion
         Mail::shouldReceive('send')->once();
 
-        $this->post('/api/givingteam/auth/register', [
+        $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
             'password_confirmation' => 'hello',
         ]);
 
-        $response = $this->post('/api/givingteam/auth/send-reset-email', [
+        $response = $this->post('/api/rainlab/user/send-reset-email', [
             'email' => 'john@example.com',
         ]);
     }
@@ -178,7 +178,7 @@ class AuthControllerTest extends PluginTestCase
     public function test_resetting_a_users_password()
     {
         // create a user with a password of "hello"
-        $this->post('/api/givingteam/auth/register', [
+        $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -188,7 +188,7 @@ class AuthControllerTest extends PluginTestCase
         $user = User::findByEmail('john@example.com');
 
         // reset the user's password to "whatever"
-        $response = $this->post('/api/givingteam/auth/reset-password', [
+        $response = $this->post('/api/rainlab/user/reset-password', [
             'code' => implode('!', [$user->id, $user->getResetPasswordCode()]),
             'password' => 'whatever',
         ]);
@@ -205,7 +205,7 @@ class AuthControllerTest extends PluginTestCase
     public function test_authenticating_a_user()
     {
         // create a user
-        $this->post('/api/givingteam/auth/register', [
+        $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -222,7 +222,7 @@ class AuthControllerTest extends PluginTestCase
         // just a sanity check, we should be logged out before logging in
         Auth::logout();
 
-        $response = $this->post('/api/givingteam/auth/signin', [
+        $response = $this->post('/api/rainlab/user/signin', [
             'login' => 'john@example.com',
             'password' => 'hello',
             'remember' => false,
@@ -241,7 +241,7 @@ class AuthControllerTest extends PluginTestCase
     public function test_authentication_with_incorrect_credentials()
     {
         // create a user
-        $this->post('/api/givingteam/auth/register', [
+        $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -251,7 +251,7 @@ class AuthControllerTest extends PluginTestCase
         // just a sanity check, we should be logged out before logging in
         Auth::logout();
 
-        $response = $this->post('/api/givingteam/auth/signin', [
+        $response = $this->post('/api/rainlab/user/signin', [
             'login' => 'john@example.com',
             'password' => 'wrong-password',
             'remember' => false,
@@ -266,7 +266,7 @@ class AuthControllerTest extends PluginTestCase
         Event::fake();
 
         // create a user and sign in
-        $this->post('/api/givingteam/auth/register', [
+        $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -279,7 +279,7 @@ class AuthControllerTest extends PluginTestCase
         $this->assertTrue(Auth::check());
 
         // request the signout route
-        $response = $this->get('/api/givingteam/auth/signout');
+        $response = $this->get('/api/rainlab/user/signout');
 
         // it should response with a standard success resposne
         $response->assertStatus(200);
@@ -293,7 +293,7 @@ class AuthControllerTest extends PluginTestCase
     public function test_updating_a_user()
     {
         // create a user
-        $this->post('/api/givingteam/auth/register', [
+        $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -301,7 +301,7 @@ class AuthControllerTest extends PluginTestCase
         ]);
 
         // try changing the user's name and email
-        $response = $this->post('/api/givingteam/auth/user', [
+        $response = $this->post('/api/rainlab/user/user', [
             'name' => 'Jane Doe',
             'email' => 'jane@example.com',
         ]);
@@ -315,7 +315,7 @@ class AuthControllerTest extends PluginTestCase
     public function test_getting_a_user_by_their_reset_password_code()
     {
         // create a user
-        $this->post('/api/givingteam/auth/register', [
+        $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -325,14 +325,14 @@ class AuthControllerTest extends PluginTestCase
         // fetch the user by their reset password code
         $user = User::findByEmail('john@example.com');
 
-        $response = $this->get('/api/givingteam/auth/reset-password?code=' . $user->id . '!' . $user->getResetPasswordCode());
+        $response = $this->get('/api/rainlab/user/reset-password?code=' . $user->id . '!' . $user->getResetPasswordCode());
 
         $this->assertEquals('John Doe', $response->getOriginalContent()->name);
     }
 
     public function test_getting_a_user_by_invalid_reset_code()
     {
-        $response = $this->get('/api/givingteam/auth/reset-password?code=1!abc');
+        $response = $this->get('/api/rainlab/user/reset-password?code=1!abc');
 
         $response->assertStatus(500);
     }
@@ -340,7 +340,7 @@ class AuthControllerTest extends PluginTestCase
     public function test_updating_a_users_password()
     {
         // create a user with the password "hello"
-        $this->post('/api/givingteam/auth/register', [
+        $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -348,7 +348,7 @@ class AuthControllerTest extends PluginTestCase
         ]);
 
         // change the password to "world"
-        $response = $this->post('/api/givingteam/auth/user', [
+        $response = $this->post('/api/rainlab/user/user', [
             'password' => 'world',
             'password_confirmation' => 'world',
         ]);
@@ -362,7 +362,7 @@ class AuthControllerTest extends PluginTestCase
     public function test_updating_user_info_while_not_authenticated()
     {
         // create a user
-        $this->post('/api/givingteam/auth/register', [
+        $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -372,7 +372,7 @@ class AuthControllerTest extends PluginTestCase
         // make sure we're not logged in
         Auth::logout();
 
-        $response = $this->post('/api/givingteam/auth/user', [
+        $response = $this->post('/api/rainlab/user/user', [
             'password' => 'world',
             'password_confirmation' => 'world',
         ]);
@@ -383,7 +383,7 @@ class AuthControllerTest extends PluginTestCase
     public function test_stopping_impersonation_of_a_user()
     {
         // create a user
-        $this->post('/api/givingteam/auth/register', [
+        $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -398,7 +398,7 @@ class AuthControllerTest extends PluginTestCase
         $this->assertTrue(Auth::isImpersonator());
 
         // last, hit our endpoint and verify that we're no longer impersonating anyone
-        $response = $this->get('/api/givingteam/auth/stop-impersonating');
+        $response = $this->get('/api/rainlab/user/stop-impersonating');
         $response->assertStatus(200);
         
         $this->assertFalse(Auth::isImpersonator());
@@ -407,7 +407,7 @@ class AuthControllerTest extends PluginTestCase
     public function test_updating_email_to_a_taken_email()
     {
         // create our first user
-        $this->post('/api/givingteam/auth/register', [
+        $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -415,7 +415,7 @@ class AuthControllerTest extends PluginTestCase
         ]);
 
         // create a second user
-        $this->post('/api/givingteam/auth/register', [
+        $this->post('/api/rainlab/user/register', [
             'email' => 'jane@example.com',
             'name' => 'Jane Doe',
             'password' => 'hello',
@@ -423,7 +423,7 @@ class AuthControllerTest extends PluginTestCase
         ]);
 
         // try to change our second user's email to the first
-        $response = $this->post('/api/givingteam/auth/user', [
+        $response = $this->post('/api/rainlab/user/user', [
             'email' => 'john@example.com',
         ]);
 
@@ -435,7 +435,7 @@ class AuthControllerTest extends PluginTestCase
     public function test_deleting_a_users_avatar()
     {
         // create a user with an avatar
-        $this->post('/api/givingteam/auth/register', [
+        $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
             'password' => 'hello',
@@ -449,7 +449,7 @@ class AuthControllerTest extends PluginTestCase
         $this->assertEquals('avatar.png', User::find($user->id)->avatar->file_name);
 
         // submit a request to remove the avatar
-        $response = $this->delete('/api/givingteam/auth/user/avatar');
+        $response = $this->delete('/api/rainlab/user/user/avatar');
         $response->assertStatus(200);
         $this->assertNull(User::with('avatar')->find($user->id)->avatar);
     }

@@ -307,7 +307,7 @@ class AccountManager
 
         $data = [
             'name' => $user->name,
-            'link' => url('api/givingteam/auth/activate?code=' . $code),
+            'link' => url('api/rainlab/user/activate?code=' . $code),
             'code' => $code
         ];
 

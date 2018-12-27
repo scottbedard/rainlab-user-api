@@ -27,21 +27,11 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name'        => 'Auth',
-            'description' => 'No description provided yet...',
-            'author'      => 'GivingTeam',
-            'icon'        => 'icon-leaf'
+            'author' => 'Vuetober',
+            'description' => 'An HTTP API for RainLab.User',
+            'icon' => 'icon-leaf',
+            'name' => 'RainLab.User API',
         ];
-    }
-
-    /**
-     * Register method, called when the plugin is first registered.
-     *
-     * @return void
-     */
-    public function register()
-    {
-
     }
 
     /**

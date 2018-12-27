@@ -1,6 +1,6 @@
 <?php
 
-Route::prefix('api/givingteam/auth')->middleware('web')->group(function() {
+Route::prefix('api/rainlab/user')->middleware('web')->group(function() {
 
     // public routes
     Route::any('signout', 'Vuetober\RainLabUserApi\Http\Controllers\AuthController@signout');
