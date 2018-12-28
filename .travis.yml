@@ -18,6 +18,7 @@ before_script:
   - mkdir -p ./october/plugins/vuetober/rainlabuserapi
   - mv !(october) october/plugins/vuetober/rainlabuserapi
   - cd october
+  - git clone https://github.com/rainlab/user-plugin.git plugins/rainlab/user
   - composer install
   - cp config/cms.php config/testing/cms.php
   - cd plugins/vuetober/rainlabuserapi
