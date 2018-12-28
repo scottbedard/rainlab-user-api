@@ -1,7 +1,7 @@
-# oc-auth-plugin
+# rainlab-user-api
 
-[![Build Status](https://travis-ci.org/givingteam/oc-auth-plugin.svg?branch=master)](https://travis-ci.org/givingteam/oc-auth-plugin)
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/givingteam/oc-auth-plugin/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/vuetober/rainlab-user-api.svg?branch=master)](https://travis-ci.org/vuetober/rainlab-user-api)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/vuetober/rainlab-user-api/blob/master/LICENSE)
 
 A simple HTTP API for [RainLab.User](https://github.com/rainlab/user-plugin).
 
