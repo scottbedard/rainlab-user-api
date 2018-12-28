@@ -11,22 +11,16 @@ matrix:
     - php: nightly
 
 before_script:
-  - wget http://getcomposer.org/composer.phar
-  - php composer.phar install --dev --no-interaction
+  - wget https://getcomposer.org/composer.phar
+  - php composer.phar install --no-interaction
   - composer self-update
   - git clone https://github.com/octobercms/october.git
-  - mkdir -p ./october/plugins/givingteam/auth
-  - mv !(october) october/plugins/givingteam/auth
+  - mkdir -p ./october/plugins/vuetober/rainlabuserapi
+  - mv !(october) october/plugins/vuetober/rainlabuserapi
   - cd october
-  - git clone https://github.com/scottbedard/user-plugin.git plugins/rainlab/user
   - composer install
-  - cp config/cms.php config/cms.php.testing
-  - mv config/cms.php.testing config/testing/cms.php
-  - cd plugins/givingteam/auth
-  - composer install
+  - cp config/cms.php config/testing/cms.php
+  - cd plugins/vuetober/rainlabuserapi
 
 script:
-  - php vendor/bin/phpunit --coverage-clover=clover.xml
-
-after_script:
-  - if [[ $TRAVIS_PHP_VERSION = 7.1 ]]; then bash <(curl -s https://codecov.io/bash) -t 5fc0b6dd-1b05-4ab6-9969-34bc89e9d07c; fi
+  - php vendor/bin/phpunit
