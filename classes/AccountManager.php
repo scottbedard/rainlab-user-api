@@ -202,7 +202,7 @@ class AccountManager
 
         // provide a hook for extensibility
         if ($user) {
-            Event::fire('givingteam.auth.afterGetUser', [&$user]);
+            Event::fire('vuetober.rainlabuserapi.afterGetUser', [&$user]);
         }
 
         return $user;

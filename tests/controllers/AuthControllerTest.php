@@ -148,7 +148,7 @@ class AuthControllerTest extends PluginTestCase
         // load the user's avatar so we can assert that this was called.
         // our test doesn't have an avatar though, so this field will
         // be null. if we didn't have this, it would be undefined.
-        Event::listen('givingteam.auth.afterGetUser', function($user) {
+        Event::listen('vuetober.rainlabuserapi.afterGetUser', function($user) {
             $user->load('avatar');
         });
 
