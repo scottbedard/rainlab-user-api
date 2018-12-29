@@ -9,6 +9,7 @@ use Vuetober\RainLabUserApi\Exceptions\InvalidResetCodeException;
 use Vuetober\RainLabUserApi\Exceptions\InvalidUserException;
 use Vuetober\RainLabUserApi\Exceptions\RegistrationDisabledException;
 use Vuetober\RainLabUserApi\Exceptions\EmailTakenException;
+use Vuetober\RainLabUserApi\Exceptions\UsernameTakenException;
 use Mail;
 use October\Rain\Auth\AuthException;
 use RainLab\User\Models\Settings as UserSettings;
@@ -152,6 +153,14 @@ class AccountManager
             User::whereEmail($data['email'])->exists()
         ) {
             throw new EmailTakenException;
+        }
+
+        // make sure the username is available
+        if (
+            array_key_exists('username', $data) &&
+            User::whereUsername($data['username'])->exists()
+        ) {
+            throw new UsernameTakenException;
         }
 
         // create the new account

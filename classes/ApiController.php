@@ -4,7 +4,7 @@ namespace Vuetober\RainLabUserApi\Classes;
 
 use Illuminate\Routing\Controller;
 use Closure;
-use ValidationException;
+use October\Rain\Exception\ValidationException;
 
 class ApiController extends Controller
 {

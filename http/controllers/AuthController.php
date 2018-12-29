@@ -10,6 +10,7 @@ use Vuetober\RainLabUserApi\Classes\ApiController;
 use Vuetober\RainLabUserApi\Exceptions\EmailTakenException;
 use Vuetober\RainLabUserApi\Exceptions\InvalidUserException;
 use Vuetober\RainLabUserApi\Exceptions\RegistrationDisabledException;
+use Vuetober\RainLabUserApi\Exceptions\UsernameTakenException;
 use Illuminate\Http\Request;
 use Input;
 use October\Rain\Auth\AuthException;
@@ -33,6 +34,10 @@ class AuthController extends ApiController
         }
 
         // validation failed
+        catch (ModelException $e) {
+            return $this->validationError($e);
+        }
+
         catch (ValidationException $e) {
             return $this->validationError($e);
         }
@@ -54,6 +59,10 @@ class AuthController extends ApiController
         }
 
         // validation failed
+        catch (ModelException $e) {
+            return $this->validationError($e);
+        }
+
         catch (ValidationException $e) {
             return $this->validationError($e);
         }
@@ -129,6 +138,10 @@ class AuthController extends ApiController
         }
         
         // validation failed
+        catch (ModelException $e) {
+            return $this->validationError($e);
+        }
+
         catch (ValidationException $e) {
             return $this->validationError($e);
         }
@@ -137,6 +150,13 @@ class AuthController extends ApiController
         catch (EmailTakenException $e) {
             return response([
                 'status' => 'email_taken',
+            ], 500);
+        }
+
+        // username is taken
+        catch (UsernameTakenException $e) {
+            return response([
+                'status' => 'username_taken',
             ], 500);
         }
 
@@ -164,6 +184,10 @@ class AuthController extends ApiController
         }
 
         // validation failed
+        catch (ModelException $e) {
+            return $this->validationError($e);
+        }
+
         catch (ValidationException $e) {
             return $this->validationError($e);
         }
@@ -271,6 +295,10 @@ class AuthController extends ApiController
         }
 
         // validation failed
+        catch (ModelException $e) {
+            return $this->validationError($e);
+        }
+
         catch (ValidationException $e) {
             return $this->validationError($e);
         }
