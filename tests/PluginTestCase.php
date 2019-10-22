@@ -4,6 +4,7 @@ namespace Bedard\RainLabUserApi\Tests;
 
 use App;
 use Artisan;
+use Config;
 use Illuminate\Foundation\AliasLoader;
 use PluginTestCase as BasePluginTestCase;
 use RainLab\User\Models\Settings as UserSettings;
@@ -18,6 +19,8 @@ class PluginTestCase extends BasePluginTestCase
     public function createApplication()
     {
         $app = parent::createApplication();
+
+        Config::set('app.url', 'http://127.0.0.1:8000/');
 
         require __DIR__.'/../routes.php';
 

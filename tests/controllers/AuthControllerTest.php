@@ -17,8 +17,8 @@ class AuthControllerTest extends PluginTestCase
         $response = $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
         $response->assertStatus(200);
