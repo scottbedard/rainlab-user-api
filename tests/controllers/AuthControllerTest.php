@@ -37,8 +37,8 @@ class AuthControllerTest extends PluginTestCase
         $response = $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
         $response->assertStatus(403);
@@ -69,8 +69,8 @@ class AuthControllerTest extends PluginTestCase
         $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
         Event::assertDispatched('rainlab.user.beforeRegister');
@@ -88,8 +88,8 @@ class AuthControllerTest extends PluginTestCase
         $response = $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
     }
 
@@ -103,8 +103,8 @@ class AuthControllerTest extends PluginTestCase
         $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
         // the user should not be activated by default
@@ -137,8 +137,8 @@ class AuthControllerTest extends PluginTestCase
         $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
         $user = User::findByEmail('john@example.com');
@@ -166,8 +166,8 @@ class AuthControllerTest extends PluginTestCase
         $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
         $response = $this->post('/api/rainlab/user/send-reset-email', [
@@ -177,12 +177,12 @@ class AuthControllerTest extends PluginTestCase
 
     public function test_resetting_a_users_password()
     {
-        // create a user with a password of "hello"
+        // create a user with a password of "12345678"
         $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
         $user = User::findByEmail('john@example.com');
@@ -208,8 +208,8 @@ class AuthControllerTest extends PluginTestCase
         $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
         // manually set our created at timestamp to yesterday so we aren't
@@ -224,7 +224,7 @@ class AuthControllerTest extends PluginTestCase
 
         $response = $this->post('/api/rainlab/user/signin', [
             'login' => 'john@example.com',
-            'password' => 'hello',
+            'password' => '12345678',
             'remember' => false,
         ]);
 
@@ -244,8 +244,8 @@ class AuthControllerTest extends PluginTestCase
         $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
         // just a sanity check, we should be logged out before logging in
@@ -269,8 +269,8 @@ class AuthControllerTest extends PluginTestCase
         $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
         Auth::login(User::findByEmail('john@example.com'));
@@ -296,8 +296,8 @@ class AuthControllerTest extends PluginTestCase
         $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
         // try changing the user's name and email
@@ -318,8 +318,8 @@ class AuthControllerTest extends PluginTestCase
         $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
         // fetch the user by their reset password code
@@ -339,23 +339,23 @@ class AuthControllerTest extends PluginTestCase
 
     public function test_updating_a_users_password()
     {
-        // create a user with the password "hello"
+        // create a user with the password "12345678"
         $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
-        // change the password to "world"
+        // change the password to "23456789"
         $response = $this->post('/api/rainlab/user/user', [
-            'password' => 'world',
-            'password_confirmation' => 'world',
+            'password' => '23456789',
+            'password_confirmation' => '23456789',
         ]);
 
         // the password should now be updated and the user returned
         $user = Auth::getUser();
-        $this->assertTrue($user->checkPassword('world'));
+        $this->assertTrue($user->checkPassword('23456789'));
         $this->assertEquals('john@example.com', $response->getOriginalContent()->email);
     }
 
@@ -365,16 +365,16 @@ class AuthControllerTest extends PluginTestCase
         $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
         // make sure we're not logged in
         Auth::logout();
 
         $response = $this->post('/api/rainlab/user/user', [
-            'password' => 'world',
-            'password_confirmation' => 'world',
+            'password' => '23456789',
+            'password_confirmation' => '23456789',
         ]);
 
         $response->assertStatus(403);
@@ -386,8 +386,8 @@ class AuthControllerTest extends PluginTestCase
         $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
         // impersonate that user
@@ -410,16 +410,16 @@ class AuthControllerTest extends PluginTestCase
         $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
         // create a second user
         $this->post('/api/rainlab/user/register', [
             'email' => 'jane@example.com',
             'name' => 'Jane Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
         // try to change our second user's email to the first
@@ -438,12 +438,12 @@ class AuthControllerTest extends PluginTestCase
         $this->post('/api/rainlab/user/register', [
             'email' => 'john@example.com',
             'name' => 'John Doe',
-            'password' => 'hello',
-            'password_confirmation' => 'hello',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
         $user = Auth::getUser();
-        $user->avatar()->create(['data' => plugins_path('vuetober/rainlabuserapi/tests/avatar.png')]);
+        $user->avatar()->create(['data' => plugins_path('bedard/rainlabuserapi/tests/avatar.png')]);
         
         // make sure our user has an avatar to prevent false positives
         $this->assertEquals('avatar.png', User::find($user->id)->avatar->file_name);
