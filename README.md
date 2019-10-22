@@ -33,25 +33,49 @@ class Plugin extends PluginBase
 
 ### Endpoints
 
-`/api/rainlab/user`
+###### `GET: /api/rainlab/user`
 
-`/api/rainlab/user/avatar`
+Get information about the authenticated user. This route uses the [`AuthMiddleware`](https://github.com/rainlab/user-plugin/blob/master/classes/AuthMiddleware.php), authentication is required to access it.
 
-`/api/rainlab/user/signout`
+###### `POST: /api/rainlab/user`
 
-`/api/rainlab/user/stop-impersonating`
+Updates information about the authenticated user. This route uses the [`AuthMiddleware`](https://github.com/rainlab/user-plugin/blob/master/classes/AuthMiddleware.php), authentication is required to access it.
 
-`/api/rainlab/user/activate`
+###### `DELETE: /api/rainlab/user/avatar`
 
-`/api/rainlab/user/reset-password`
+Deletes the authenticated user's avatar. This route uses the [`AuthMiddleware`](https://github.com/rainlab/user-plugin/blob/master/classes/AuthMiddleware.php), authentication is required to access it.
 
-`/api/rainlab/user/register`
+###### `ANY: /api/rainlab/user/signout`
 
-`/api/rainlab/user/reset-password`
+Sign out the authenticated user.
 
-`/api/rainlab/user/send-reset-email`
+###### `ANY: /api/rainlab/user/stop-impersonating`
 
-`/api/rainlab/user/signin`
+Stop impersonating a user.
+
+###### `GET: /api/rainlab/user/activate`
+
+Activate a new user.
+
+###### `GET: /api/rainlab/user/reset-password`
+
+Get user information by password reset code.
+
+###### `POST: /api/rainlab/user/reset-password`
+
+Reset a user's password.
+
+###### `POST: /api/rainlab/user/register`
+
+Register a new user.
+
+###### `POST: /api/rainlab/user/send-reset-email`
+
+Initiate the password reset process for a user.
+
+###### `POST: /api/rainlab/user/signin`
+
+Authenticate a user.
 
 ### License
 
