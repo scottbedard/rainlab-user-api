@@ -25,7 +25,7 @@ before_script:
   - cd plugins/bedard/rainlabuserapi
 
 script:
-  - if [[ $TRAVIS_PHP_VERSION = 7.3 ]]; then php vendor/bin/phpunit --coverage-clover clover.xml; else php vendor/bin/phpunit; fi
+  - php vendor/bin/phpunit --coverage-clover=coverage.xml
 
-after_script:
-  - if [[ $TRAVIS_PHP_VERSION = 7.3 ]]; then bash <(curl -s https://codecov.io/bash) -t 5fc0b6dd-1b05-4ab6-9969-34bc89e9d07c -cF php; fi
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
