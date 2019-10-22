@@ -4,6 +4,7 @@ php:
   - 7.0
   - 7.1
   - 7.2
+  - 7.3
   - nightly
 
 matrix:
@@ -15,13 +16,13 @@ before_script:
   - php composer.phar install --no-interaction
   - composer self-update
   - git clone https://github.com/octobercms/october.git
-  - mkdir -p ./october/plugins/vuetober/rainlabuserapi
-  - mv !(october) october/plugins/vuetober/rainlabuserapi
+  - mkdir -p ./october/plugins/bedard/rainlabuserapi
+  - mv !(october) october/plugins/bedard/rainlabuserapi
   - cd october
   - git clone https://github.com/rainlab/user-plugin.git plugins/rainlab/user
   - composer install
   - cp config/cms.php config/testing/cms.php
-  - cd plugins/vuetober/rainlabuserapi
+  - cd plugins/bedard/rainlabuserapi
 
 script:
   - php vendor/bin/phpunit
