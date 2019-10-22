@@ -1,6 +1,6 @@
 <?php
 
-namespace Vuetober\RainLabUserApi\Classes;
+namespace Bedard\RainLabUserApi\Classes;
 
 use Illuminate\Routing\Controller;
 use Closure;

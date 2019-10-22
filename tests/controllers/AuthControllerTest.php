@@ -1,12 +1,12 @@
 <?php
 
-namespace Vuetober\RainLabUserApi\Tests\Controllers;
+namespace Bedard\RainLabUserApi\Tests\Controllers;
 
 use Auth;
 use Carbon\Carbon;
 use Event;
 use Mail;
-use Vuetober\RainLabUserApi\Tests\PluginTestCase;
+use Bedard\RainLabUserApi\Tests\PluginTestCase;
 use RainLab\User\Models\User;
 use RainLab\User\Models\Settings as UserSettings;
 
@@ -148,7 +148,7 @@ class AuthControllerTest extends PluginTestCase
         // load the user's avatar so we can assert that this was called.
         // our test doesn't have an avatar though, so this field will
         // be null. if we didn't have this, it would be undefined.
-        Event::listen('vuetober.rainlabuserapi.afterGetUser', function($user) {
+        Event::listen('bedard.rainlabuserapi.afterGetUser', function($user) {
             $user->load('avatar');
         });
 

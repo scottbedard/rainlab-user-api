@@ -1,15 +1,15 @@
 <?php
 
-namespace Vuetober\RainLabUserApi\Classes;
+namespace Bedard\RainLabUserApi\Classes;
 
 use ApplicationException;
 use Auth;
 use Event;
-use Vuetober\RainLabUserApi\Exceptions\InvalidResetCodeException;
-use Vuetober\RainLabUserApi\Exceptions\InvalidUserException;
-use Vuetober\RainLabUserApi\Exceptions\RegistrationDisabledException;
-use Vuetober\RainLabUserApi\Exceptions\EmailTakenException;
-use Vuetober\RainLabUserApi\Exceptions\UsernameTakenException;
+use Bedard\RainLabUserApi\Exceptions\InvalidResetCodeException;
+use Bedard\RainLabUserApi\Exceptions\InvalidUserException;
+use Bedard\RainLabUserApi\Exceptions\RegistrationDisabledException;
+use Bedard\RainLabUserApi\Exceptions\EmailTakenException;
+use Bedard\RainLabUserApi\Exceptions\UsernameTakenException;
 use Mail;
 use October\Rain\Auth\AuthException;
 use RainLab\User\Models\Settings as UserSettings;
@@ -202,7 +202,7 @@ class AccountManager
 
         // provide a hook for extensibility
         if ($user) {
-            Event::fire('vuetober.rainlabuserapi.afterGetUser', [&$user]);
+            Event::fire('bedard.rainlabuserapi.afterGetUser', [&$user]);
         }
 
         return $user;

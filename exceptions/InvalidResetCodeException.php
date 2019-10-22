@@ -1,6 +1,6 @@
 <?php
 
-namespace Vuetober\RainLabUserApi\Exceptions;
+namespace Bedard\RainLabUserApi\Exceptions;
 
 use October\Rain\Exception\ExceptionBase;
 

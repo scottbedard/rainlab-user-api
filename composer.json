@@ -1,10 +1,10 @@
 {
-    "name": "vuetober/rainlab-user-api",
+    "name": "bedard/rainlab-user-api",
     "type": "october-plugin",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Vuetober\\RainLabUserApi\\Tests\\": "tests/"
+            "Bedard\\RainLabUserApi\\Tests\\": "tests/"
         }
     },
     "require-dev": {

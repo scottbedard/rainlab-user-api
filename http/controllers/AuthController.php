@@ -1,16 +1,16 @@
 <?php
 
-namespace Vuetober\RainLabUserApi\Http\Controllers;
+namespace Bedard\RainLabUserApi\Http\Controllers;
 
 use ApplicationException;
 use Auth;
 use Exception;
-use Vuetober\RainLabUserApi\Classes\AccountManager;
-use Vuetober\RainLabUserApi\Classes\ApiController;
-use Vuetober\RainLabUserApi\Exceptions\EmailTakenException;
-use Vuetober\RainLabUserApi\Exceptions\InvalidUserException;
-use Vuetober\RainLabUserApi\Exceptions\RegistrationDisabledException;
-use Vuetober\RainLabUserApi\Exceptions\UsernameTakenException;
+use Bedard\RainLabUserApi\Classes\AccountManager;
+use Bedard\RainLabUserApi\Classes\ApiController;
+use Bedard\RainLabUserApi\Exceptions\EmailTakenException;
+use Bedard\RainLabUserApi\Exceptions\InvalidUserException;
+use Bedard\RainLabUserApi\Exceptions\RegistrationDisabledException;
+use Bedard\RainLabUserApi\Exceptions\UsernameTakenException;
 use Illuminate\Http\Request;
 use Input;
 use October\Rain\Auth\AuthException;

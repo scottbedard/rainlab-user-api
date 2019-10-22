@@ -1,6 +1,6 @@
 <?php
 
-namespace Vuetober\RainLabUserApi\Tests;
+namespace Bedard\RainLabUserApi\Tests;
 
 use App;
 use Artisan;
