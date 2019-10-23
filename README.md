@@ -3,9 +3,13 @@
 [![Build Status](https://travis-ci.org/scottbedard/rainlab-user-api.svg?branch=master)](https://travis-ci.org/scottbedard/rainlab-user-api)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/scottbedard/rainlab-user-api/blob/master/LICENSE)
 
-A simple HTTP API for [RainLab.User](https://github.com/rainlab/user-plugin).
+A simple and extendable HTTP API for [RainLab.User](https://github.com/rainlab/user-plugin).
 
 > **Warning:** This plugin is in active development. Be careful using it, API changes may happen at any time.
+
+- [Plugin Usage](#plugin-usage)
+- [Middleware](#middleware)
+- [Endpoints](#endpoints)
 
 ### Plugin Usage
 
@@ -28,6 +32,19 @@ class Plugin extends PluginBase
             $user->load(['avatar']);
         });
     }
+}
+```
+
+### Middleware
+
+A middleware is often necessary to format responses to be consistent with the rest of your application's API. To do this, add the following to your plugin's `boot` method. Check out [October documentation](https://octobercms.com/docs/plugin/registration#registering-middleware) for more information on using middleware.
+
+```php
+public function boot()
+{
+    \Bedard\RainLabUserApi\Classes\ApiController::extend(function($controller) {
+        $controller->middleware('Path\To\Custom\Middleware');
+    });
 }
 ```
 
