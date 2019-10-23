@@ -24,14 +24,11 @@ $user = (new AccountManager)->getAuthenticatedUser();
 Using this method to fetch the `User` model will trigger a `bedard.rainlabuserapi.afterGetUser` event. This can be useful useful when other data needs to be loaded with the user. In this example, we'll have a plugin load the user's avatar.
 
 ```php
-class Plugin extends PluginBase
+public function boot()
 {
-    public function boot()
-    {
-        Event::listen('bedard.rainlabuserapi.afterGetUser', function ($user) {
-            $user->load(['avatar']);
-        });
-    }
+    Event::listen('bedard.rainlabuserapi.afterGetUser', function ($user) {
+        $user->load(['avatar']);
+    });
 }
 ```
 
