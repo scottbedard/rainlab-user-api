@@ -107,7 +107,7 @@ class UsersControllerTest extends PluginTestCase
 
     public function test_registration_throttling()
     {
-        Settings::get('use_register_throttle', false);
+        Settings::set('use_register_throttle', false);
 
         $this->post('/api/rainlab/user/users', [
             'email' => 'one@example.com',
@@ -127,13 +127,21 @@ class UsersControllerTest extends PluginTestCase
             'password_confirmation' => '12345678',
         ])->assertStatus(200);
 
-        Settings::get('use_register_throttle', true);
-
         $this->post('/api/rainlab/user/users', [
             'email' => 'four@example.com',
             'password' => '12345678',
             'password_confirmation' => '12345678',
+        ])->assertStatus(200);
+
+        Settings::set('use_register_throttle', true);
+
+        $this->post('/api/rainlab/user/users', [
+            'email' => 'five@example.com',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ])->assertStatus(429);
+
+        $this->assertEquals(4, User::count());
     }
 
     public function test_registering_without_password_confirmation()
