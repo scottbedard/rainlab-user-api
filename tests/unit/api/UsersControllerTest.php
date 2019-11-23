@@ -4,12 +4,15 @@ namespace Bedard\RainLabUserApi\Tests\Unit\Api;
 
 use Bedard\RainLabUserApi\Tests\PluginTestCase;
 use Event;
-use Mockery;
+use Mail;
 use RainLab\User\Models\Settings;
 use RainLab\User\Models\User;
 
 class UsersControllerTest extends PluginTestCase
 {
+    //
+    // create
+    //
     public function test_registering_a_user()
     {
         $beforeRegisterFired = false;
@@ -57,7 +60,7 @@ class UsersControllerTest extends PluginTestCase
         $response->assertStatus(422);
     }
 
-    public function test_creating_a_user_while_registration_is_disabled()
+    public function test_registering_while_registration_is_disabled()
     {
         Settings::set('allow_registration', false);
 
@@ -69,6 +72,37 @@ class UsersControllerTest extends PluginTestCase
         ]);
 
         $response->assertStatus(503);
+    }
+
+    public function test_registering_with_user_activation()
+    {
+        $sent = false;
+
+        Settings::set('activate_mode', Settings::ACTIVATE_USER);
+        Settings::set('activate_url', 'https://example.com/activate/{code}');
+
+        Event::listen('mailer.beforeSend', function ($view, $data) use (&$sent) {
+            $user = User::first();
+            
+            $expectedCode = implode('!', [$user->id, $user->activation_code]);
+            
+            $this->assertArraySubset([
+                'name' => $user->name,
+                'code' => $expectedCode,
+                'link' => 'https://example.com/activate/'.$expectedCode,
+            ], $data);
+
+            $sent = true;
+        });
+
+        $response = $this->post('/api/rainlab/user/users', [
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
+        ]);
+
+        $this->assertTrue($sent);
     }
 
     // create (throttled)

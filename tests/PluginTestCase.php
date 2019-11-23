@@ -2,6 +2,7 @@
 
 namespace Bedard\RainLabUserApi\Tests;
 
+use Mail;
 use Mockery;
 use PluginTestCase as BasePluginTestCase;
 use System\Classes\PluginManager;
@@ -20,6 +21,8 @@ class PluginTestCase extends BasePluginTestCase
         $pluginManager = PluginManager::instance();
         $pluginManager->registerAll(true);
         $pluginManager->bootAll(true);
+
+        Mail::pretend();
     }
 
     /**
