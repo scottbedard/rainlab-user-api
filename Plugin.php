@@ -58,10 +58,9 @@ class Plugin extends PluginBase
                 ],
 
                 // activation url
-                'activate_url' => [
-                    'comment' => 'bedard.rainlabuserapi::lang.settings.activate_url_comment',
-                    'commentHtml' => true,
-                    'label' => 'bedard.rainlabuserapi::lang.settings.activate_url_label',
+                'activate_redirect' => [
+                    'comment' => 'bedard.rainlabuserapi::lang.settings.activate_redirect_comment',
+                    'label' => 'bedard.rainlabuserapi::lang.settings.activate_redirect_label',
                     'span' => 'left',
                     'tab' => 'rainlab.user::lang.settings.activation_tab',
                     'trigger' => [

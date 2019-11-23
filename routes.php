@@ -1,13 +1,16 @@
 <?php
 
 if (config('bedard.rainlabuserapi::apiEnable')) {
+    $activateRoute = config('bedard.rainlabuserapi::activateRoute');
+    $apiPrefix = config('bedard.rainlabuserapi::apiPrefix');
 
-    $prefix = config('bedard.rainlabuserapi::apiPrefix');
+    // api
+    Route::prefix($apiPrefix)->middleware('web')->group(function () {
 
-    Route::prefix($prefix)->middleware('web')->group(function () {
         // users
         Route::prefix('users')->group(function () {
             Route::post('/', 'Bedard\RainLabUserApi\Http\Controllers\UsersController@store');
+            Route::get('/activate/{code}', 'Bedard\RainLabUserApi\Http\Controllers\UsersController@activate');
         });
     });
 }

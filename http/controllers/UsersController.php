@@ -4,17 +4,47 @@ namespace Bedard\RainLabUserApi\Http\Controllers;
 
 use Auth;
 use Bedard\RainLabUserApi\Classes\ApiController;
+use Bedard\RainLabUserApi\Classes\Utils;
 use Event;
 use Lang;
 use Mail;
 use RainLab\User\Models\Settings;
 use RainLab\User\Models\User;
 use Request;
-use ValidationException;
 use Validator;
 
 class UsersController extends ApiController
 {
+    /**
+     * Activate a user.
+     * 
+     * @param  string   $idCode
+     */
+    public function activate($idCode)
+    {
+        // validate the id and code
+        $parts = explode('!', $idCode);
+
+        if (count($parts) !== 2) {
+            return response(Lang::get('rainlab.user::lang.account.invalid_activation_code'), 400);
+        }
+
+        list($userId, $code) = $parts;
+
+        if (!strlen(trim($userId)) || !strlen(trim($code))) {
+            return response(Lang::get('rainlab.user::lang.account.invalid_activation_code'), 400);
+        }
+
+        // find and activate the user
+        $user = Auth::findUserById($userId);
+
+        if (!$user || !$user->attemptActivation($code)) {
+            return response(Lang::get('rainlab.user::lang.account.invalid_activation_code'), 400);
+        }
+
+        return redirect(Settings::get('activate_redirect', '/'));
+    }
+
     /**
      * Create a user.
      * 
@@ -125,14 +155,13 @@ class UsersController extends ApiController
     */
    protected function sendActivationEmail($user)
    {
-       $code = implode('!', [$user->id, $user->getActivationCode()]);
-
-       $link = str_replace('{code}', $code, Settings::get('activate_url', ''));
+       $code = Utils::activationCode($user);
+       $link = Utils::activationLink($code);
 
        $data = [
-           'name' => $user->name,
+           'code' => $code,
            'link' => $link,
-           'code' => $code
+           'name' => $user->name,
        ];
 
        Mail::send('rainlab.user::mail.activate', $data, function($message) use ($user) {

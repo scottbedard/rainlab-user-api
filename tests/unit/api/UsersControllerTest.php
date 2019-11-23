@@ -2,7 +2,9 @@
 
 namespace Bedard\RainLabUserApi\Tests\Unit\Api;
 
+use Bedard\RainLabUserApi\Classes\Utils;
 use Bedard\RainLabUserApi\Tests\PluginTestCase;
+use Config;
 use Event;
 use Mail;
 use RainLab\User\Models\Settings;
@@ -79,17 +81,16 @@ class UsersControllerTest extends PluginTestCase
         $sent = false;
 
         Settings::set('activate_mode', Settings::ACTIVATE_USER);
-        Settings::set('activate_url', 'https://example.com/activate/{code}');
+        // Settings::set('activate_url', 'https://example.com/activate/{code}');
 
         Event::listen('mailer.beforeSend', function ($view, $data) use (&$sent) {
             $user = User::first();
-            
             $expectedCode = implode('!', [$user->id, $user->activation_code]);
-            
+
             $this->assertArraySubset([
                 'name' => $user->name,
                 'code' => $expectedCode,
-                'link' => 'https://example.com/activate/'.$expectedCode,
+                'link' => Utils::activationLink($expectedCode),
             ], $data);
 
             $sent = true;
@@ -158,6 +159,35 @@ class UsersControllerTest extends PluginTestCase
         $this->assertEquals('sally@example.com', $data['email']);
     }
     
+    //
+    // activate
+    //
+    public function test_activating_a_user()
+    {
+        Settings::set('activate_mode', Settings::ACTIVATE_USER);
+        Settings::set('activate_redirect', '/welcome');
+        
+        $this->post('/api/rainlab/user/users', [
+            'email' => 'john@example.com',
+            'password' => '12345678',
+        ]);
+
+        $user = User::first();
+        $code = implode('!', [$user->id, $user->activation_code]);
+
+        $request = $this->get('/api/rainlab/user/users/activate/' . $code);
+        $request->assertRedirect('/welcome');
+    }
+
+    public function test_activating_with_invalid_code()
+    {
+        Settings::set('activate_mode', Settings::ACTIVATE_USER);
+
+        $request = $this->get('/api/rainlab/user/users/activate/badcode');
+
+        $request->assertStatus(400);
+    }
+
     // read
     // update
     // delete
