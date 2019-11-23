@@ -51,17 +51,24 @@ class Plugin extends PluginBase
                 // password reset url
                 'password_reset_url' => [
                     'comment' => 'bedard.rainlabuserapi::lang.settings.password_reset_url_comment',
+                    'commentHtml' => true,
                     'label' => 'bedard.rainlabuserapi::lang.settings.password_reset_url_label',
                     'span' => 'left',
-                    'tab' => 'API',
+                    'tab' => 'rainlab.user::lang.settings.signin_tab',
                 ],
 
-                // activation redirect
-                'activation_redirect' => [
-                    'comment' => 'bedard.rainlabuserapi::lang.settings.activation_redirect_comment',
-                    'label' => 'bedard.rainlabuserapi::lang.settings.activation_redirect_label',
+                // activation url
+                'activate_url' => [
+                    'comment' => 'bedard.rainlabuserapi::lang.settings.activate_url_comment',
+                    'commentHtml' => true,
+                    'label' => 'bedard.rainlabuserapi::lang.settings.activate_url_label',
                     'span' => 'left',
-                    'tab' => 'API',
+                    'tab' => 'rainlab.user::lang.settings.activation_tab',
+                    'trigger' => [
+                        'action' => 'enable',
+                        'condition' => 'value['.UserSettings::ACTIVATE_USER.']',
+                        'field' => 'activate_mode',
+                    ],
                 ],
             ]);
         });
