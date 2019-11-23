@@ -105,7 +105,34 @@ class UsersControllerTest extends PluginTestCase
         $this->assertTrue($sent);
     }
 
-    // create (throttled)
+    public function test_registration_throttling()
+    {
+        Settings::get('use_register_throttle', true);
+
+        $this->post('/api/rainlab/user/users', [
+            'email' => 'one@example.com',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
+        ])->assertStatus(200);
+
+        $this->post('/api/rainlab/user/users', [
+            'email' => 'two@example.com',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
+        ])->assertStatus(200);
+
+        $this->post('/api/rainlab/user/users', [
+            'email' => 'three@example.com',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
+        ])->assertStatus(200);
+
+        $this->post('/api/rainlab/user/users', [
+            'email' => 'four@example.com',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
+        ])->assertStatus(429);
+    }
     
     // read
     // update
