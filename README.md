@@ -11,7 +11,7 @@ A simple and extendable HTTP API for [RainLab.User](https://github.com/rainlab/u
 - [Middleware](#middleware)
 - [Endpoints](#endpoints)
 
-### Plugin Usage
+## Basic usage
 
 To get the authenticated user, use the `AccountManager` class.
 
@@ -32,9 +32,23 @@ public function boot()
 }
 ```
 
-### Middleware
+## Configuration
 
-A middleware is often necessary to format responses to be consistent with the rest of your application's API. To do this, add the following to your plugin's `boot` method. Check out [October documentation](https://octobercms.com/docs/plugin/registration#registering-middleware) for more information on using middleware.
+By default, all routes are grouped behind a `/api/rainlab/user` prefix. To override this behavior, add the following to a `.env` file at the root of your October installation.
+
+```
+RAINLAB_USER_API_PREFIX="/your/custom/prefix"
+```
+
+Additionally, the API can be disabled completely by adding the following:
+
+```
+RAINLAB_USER_API_ENABLE=false
+```
+
+## Middleware
+
+All endpoints use a base controller that can be extended. This can be used to add middleware that make the responses consistent with the rest of your API. To do this, add the following to your `Plugin.php` file. See the [October documentation](https://octobercms.com/docs/plugin/registration#registering-middleware) for more information on using middleware.
 
 ```php
 public function boot()
@@ -45,7 +59,15 @@ public function boot()
 }
 ```
 
-### Endpoints
+## Endpoints
+
+`POST: /api/rainlab/user/users`
+
+Registers a user, and triggers related events and activation processes.
+
+## 0.x Endpoints
+
+> **Note:** We're migrating this plugin to a stable release. These endpoints are deprecated, and will soon be removed.
 
 ###### `GET: /api/rainlab/user`
 
@@ -79,10 +101,6 @@ Get user information by password reset code.
 
 Reset a user's password.
 
-###### `POST: /api/rainlab/user/register`
-
-Register a new user.
-
 ###### `POST: /api/rainlab/user/send-reset-email`
 
 Initiate the password reset process for a user.
@@ -91,9 +109,8 @@ Initiate the password reset process for a user.
 
 Authenticate a user.
 
-### License
+## License
 
 [MIT](https://github.com/scottbedard/rainlab-user-api/blob/master/LICENSE)
 
 Copyright (c) 2018-present, Scott Bedard.
-
