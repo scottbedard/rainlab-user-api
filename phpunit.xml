@@ -7,11 +7,11 @@
     convertErrorsToExceptions="true"
     convertNoticesToExceptions="true"
     convertWarningsToExceptions="true"
-    processIsolation="false"
+    processIsolation="true"
     stopOnFailure="false"
     syntaxCheck="false">
     <testsuites>
-        <testsuite name="GivingTeam.Auth">
+        <testsuite name="bedard.rainlabuserapi">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
@@ -21,15 +21,14 @@
         <env name="SESSION_DRIVER" value="array"/>
     </php>
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./classes</directory>
-            <directory suffix=".php">./exceptions</directory>
-            <directory suffix=".php">./http</directory>
+        <whitelist>
+            <directory suffix=".php">./</directory>
             <exclude>
                 <file>./Plugin.php</file>
-                <directory>./tests</directory>
-                <directory>./updates</directory>
-                <directory>./vendor</directory>
+                <directory suffix=".php">./lang</directory>
+                <directory suffix=".php">./tests</directory>
+                <directory suffix=".php">./updates</directory>
+                <directory suffix=".php">./vendor</directory>
             </exclude>
         </whitelist>
     </filter>
