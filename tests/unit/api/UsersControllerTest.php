@@ -36,8 +36,11 @@ class UsersControllerTest extends PluginTestCase
 
         $response = $this->post('/api/rainlab/user/users', $params);
         $response->assertStatus(200);
+        $data = json_decode($response->getContent(), true);
 
         $this->assertTrue($registerFired);
+        $this->assertEquals(1, User::count());
+        $this->assertEquals(User::first()->id, $data['id']);
     }
 
     public function test_registering_with_invalid_login_attribute()
