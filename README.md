@@ -61,9 +61,13 @@ public function boot()
 
 ## Endpoints
 
+##### `POST: /api/rainlab/user/auth/signin`
+
+Authenticate a user.
+
 ##### `POST: /api/rainlab/user/users`
 
-Registers a user, and triggers related events and activation processes.
+Create user and trigger activation process.
 
 ##### `GET: /api/rainlab/users/user/activate/{code}`
 
@@ -104,10 +108,6 @@ Reset a user's password.
 ###### `POST: /api/rainlab/user/send-reset-email`
 
 Initiate the password reset process for a user.
-
-###### `POST: /api/rainlab/user/signin`
-
-Authenticate a user.
 
 ## License
 
