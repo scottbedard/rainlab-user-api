@@ -82,4 +82,53 @@ class AuthControllerTest extends PluginTestCase
         // see: https://github.com/rainlab/user-plugin/issues/413
         $response->assertStatus(500);
     }
+
+    public function test_authenticating_with_invalid_data()
+    {
+        $user = self::createActivatedUser([
+            'email' => 'john@example.com',
+            'password' => '12345678',
+        ]);
+
+        $response = $this->post('/api/rainlab/user/auth/signin', [
+            'foo' => 'bar',
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    public function test_never_remembering_authentication()
+    {
+        UserSettings::set('remember_login', UserSettings::REMEMBER_NEVER);
+
+        $user = self::createActivatedUser([
+            'email' => 'john@example.com',
+            'password' => '12345678',
+        ]);
+
+        $response = $this->post('/api/rainlab/user/auth/signin', [
+            'email' => $user->email,
+            'password' => '12345678',
+        ]);
+
+        $response->assertStatus(200);
+    }
+
+    public function test_ask_remembering_authentication()
+    {
+        UserSettings::set('remember_login', UserSettings::REMEMBER_ASK);
+
+        $user = self::createActivatedUser([
+            'email' => 'john@example.com',
+            'password' => '12345678',
+        ]);
+
+        $response = $this->post('/api/rainlab/user/auth/signin', [
+            'email' => $user->email,
+            'password' => '12345678',
+            'remember' => true,
+        ]);
+
+        $response->assertStatus(200);
+    }
 }
