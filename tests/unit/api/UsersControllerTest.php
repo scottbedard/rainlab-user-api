@@ -313,7 +313,7 @@ class UsersControllerTest extends PluginTestCase
     public function test_invalid_password_reset_code()
     {
         $response = $this->post('/api/rainlab/user/users/reset-password', [
-            'code' => '1!',
+            'code' => 'foobar',
             'password' => 'helloworld',
         ]);
 
