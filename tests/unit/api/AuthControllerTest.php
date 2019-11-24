@@ -11,7 +11,7 @@ use RainLab\User\Models\User as UserModel;
 class AuthControllerTest extends PluginTestCase
 {
     //
-    // signin
+    // login
     //
     public function test_email_authentication()
     {
@@ -31,7 +31,7 @@ class AuthControllerTest extends PluginTestCase
             $beforeAuthenticate = true;
         });
 
-        $response = $this->post('/api/rainlab/user/auth/signin', [
+        $response = $this->post('/api/rainlab/user/auth/login', [
             'email' => $user->email,
             'password' => '12345678',
         ]);
@@ -53,7 +53,7 @@ class AuthControllerTest extends PluginTestCase
             'password' => '12345678',
         ]);
 
-        $response = $this->post('/api/rainlab/user/auth/signin', [
+        $response = $this->post('/api/rainlab/user/auth/login', [
             'username' => $user->username,
             'password' => '12345678',
         ]);
@@ -74,7 +74,7 @@ class AuthControllerTest extends PluginTestCase
 
         $user->ban();
 
-        $response = $this->post('/api/rainlab/user/auth/signin', [
+        $response = $this->post('/api/rainlab/user/auth/login', [
             'email' => $user->email,
             'password' => '12345678',
         ]);
@@ -91,7 +91,7 @@ class AuthControllerTest extends PluginTestCase
             'password' => '12345678',
         ]);
 
-        $response = $this->post('/api/rainlab/user/auth/signin', [
+        $response = $this->post('/api/rainlab/user/auth/login', [
             'foo' => 'bar',
         ]);
 
@@ -107,7 +107,7 @@ class AuthControllerTest extends PluginTestCase
             'password' => '12345678',
         ]);
 
-        $response = $this->post('/api/rainlab/user/auth/signin', [
+        $response = $this->post('/api/rainlab/user/auth/login', [
             'email' => $user->email,
             'password' => '12345678',
         ]);
@@ -124,7 +124,7 @@ class AuthControllerTest extends PluginTestCase
             'password' => '12345678',
         ]);
 
-        $response = $this->post('/api/rainlab/user/auth/signin', [
+        $response = $this->post('/api/rainlab/user/auth/login', [
             'email' => $user->email,
             'password' => '12345678',
             'remember' => true,
@@ -136,7 +136,7 @@ class AuthControllerTest extends PluginTestCase
     //
     // signout
     //
-    public function test_signing_out()
+    public function test_logging_out()
     {
         $logout = false;
 
@@ -156,7 +156,7 @@ class AuthControllerTest extends PluginTestCase
             $this->assertEquals($user->id, $logoutUser->id);
         });
 
-        $response = $this->get('/api/rainlab/user/auth/signout');
+        $response = $this->get('/api/rainlab/user/auth/logout');
         
         $response->assertStatus(200);
 

@@ -20,7 +20,7 @@ class AuthController extends ApiController
      * 
      * @return Illuminate\Http\Response
      */
-    public function signin()
+    public function login()
     {
         // validate the input
         $data = post();
@@ -87,11 +87,11 @@ class AuthController extends ApiController
     }
 
     /**
-     * Signout.
+     * Log a user out.
      * 
      * @return Illuminate\Http\Response
      */
-    public function signout()
+    public function logout()
     {
         $user = Auth::getUser();
 

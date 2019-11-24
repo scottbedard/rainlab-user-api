@@ -8,8 +8,8 @@ if (config('bedard.rainlabuserapi::apiEnable')) {
     Route::prefix($apiPrefix)->middleware('web')->group(function () {
         // auth
         Route::prefix('auth')->group(function () {
-            Route::post('signin', 'Bedard\RainLabUserApi\Http\Controllers\AuthController@signin');
-            Route::any('signout', 'Bedard\RainLabUserApi\Http\Controllers\AuthController@signout');
+            Route::post('login', 'Bedard\RainLabUserApi\Http\Controllers\AuthController@login');
+            Route::any('logout', 'Bedard\RainLabUserApi\Http\Controllers\AuthController@logout');
         });
 
         // users

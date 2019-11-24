@@ -61,13 +61,13 @@ public function boot()
 
 ## Endpoints
 
-##### `POST: /api/rainlab/user/auth/signin`
+##### `POST: /api/rainlab/user/auth/login`
 
 Authenticate a user.
 
-###### `ANY: /api/rainlab/user/auth/signout`
+###### `ANY: /api/rainlab/user/auth/logout`
 
-Sign out the authenticated user.
+Log out the authenticated user.
 
 ##### `POST: /api/rainlab/user/users`
 
