@@ -5,6 +5,7 @@ namespace Bedard\RainLabUserApi\Tests\Unit\Api;
 use Auth;
 use Bedard\RainLabUserApi\Tests\PluginTestCase;
 use Event;
+use Illuminate\Http\UploadedFile;
 use RainLab\User\Models\Settings as UserSettings;
 use RainLab\User\Models\User as UserModel;
 
@@ -118,5 +119,25 @@ class AccountControllerTest extends PluginTestCase
         ]);
         
         $response->assertStatus(403);
+    }
+
+    public function test_avatar_update()
+    {
+        $user = self::createActivatedUser([
+            'email' => 'john@example.com',
+            'password' => '12345678',
+        ]);
+
+        Auth::login($user);
+
+        $this->assertNull($user->avatar);
+
+        $file = UploadedFile::fake()->image(plugins_path('bedard/rainlabuserapi/tests/avatar.png'));
+
+        $response = $this->post('/api/rainlab/user/account', [
+            'avatar' => $file,
+        ]);
+
+        $this->assertNotNull($user->avatar);
     }
 }
