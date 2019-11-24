@@ -188,6 +188,24 @@ class UsersControllerTest extends PluginTestCase
         $request->assertStatus(400);
     }
 
+    public function test_activating_with_code_that_is_missing_an_id()
+    {
+        Settings::set('activate_mode', Settings::ACTIVATE_USER);
+
+        $request = $this->get('/api/rainlab/user/users/activate/!badcode');
+
+        $request->assertStatus(400);
+    }
+
+    public function test_activating_with_code_that_matches_no_user()
+    {
+        Settings::set('activate_mode', Settings::ACTIVATE_USER);
+
+        $request = $this->get('/api/rainlab/user/users/activate/1!badcode');
+
+        $request->assertStatus(400);
+    }
+
     // read
     // update
     // delete
