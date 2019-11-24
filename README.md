@@ -1,15 +1,35 @@
 # rainlab-user-api
 
-[![Build Status](https://img.shields.io/circleci/build/github/scottbedard/rainlab-user-api)](https://circleci.com/gh/scottbedard/rainlab-user-api)
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/scottbedard/rainlab-user-api/blob/master/LICENSE)
+[![Build status](https://img.shields.io/circleci/build/github/scottbedard/rainlab-user-api)](https://circleci.com/gh/scottbedard/rainlab-user-api)
+[![Code coverage](https://img.shields.io/codecov/c/github/scottbedard/rainlab-user-api)](https://codecov.io/gh/scottbedard/rainlab-user-api)
+[![MIT License](https://img.shields.io/github/license/scottbedard/rainlab-user-api?color=blue)](https://github.com/scottbedard/rainlab-user-api/blob/master/LICENSE)
 
 A simple and extendable HTTP API for [RainLab.User](https://github.com/rainlab/user-plugin).
 
-> **Warning:** This plugin is in active development. Be careful using it, API changes may happen at any time.
-
+- [Installation](#installation)
 - [Basic Usage](#basic-usage)
-- [Middleware](#middleware)
+- [Middleware](#adding-middleware)
 - [Endpoints](#endpoints)
+
+## Installation & configuration
+
+To install the API, run the following commands from your root October directory:
+
+```bash
+git clone git@github.com:scottbedard/rainlab-user-api.git plugins/bedard/rainlabuserapi
+```
+
+By default, all routes are grouped behind a `/api/rainlab/user` prefix. To override this, add the following to a `.env` file at the root of your October installation. Alternatively, you can use October's [file based configuration](https://octobercms.com/docs/plugin/settings#file-configuration).
+
+```
+RAINLAB_USER_API_PREFIX="/your/custom/prefix"
+```
+
+To disable the API completely, add the following environment variable:
+
+```
+RAINLAB_USER_API_ENABLE=false
+```
 
 ## Basic usage
 
@@ -18,10 +38,10 @@ To get the authenticated user, use the `AccountManager` class.
 ```php
 use Bedard\RainLabUserApi\Classes\AccountManager;
 
-$user = (new AccountManager)->getAuthenticatedUser();
+$user = AccountManager::getAuthenticatedUser();
 ```
 
-Using this method to fetch the `User` model will trigger a `bedard.rainlabuserapi.afterGetUser` event. This can be useful useful when other data needs to be loaded with the user. In this example, we'll have a plugin load the user's avatar.
+Using this method to fetch the `User` model will trigger a `bedard.rainlabuserapi.afterGetUser` event. This can be useful useful when other data needs to be loaded with the user. As an example, here we'll configure the API to load the user's avatar.
 
 ```php
 public function boot()
@@ -32,21 +52,7 @@ public function boot()
 }
 ```
 
-## Configuration
-
-By default, all routes are grouped behind a `/api/rainlab/user` prefix. To override this behavior, add the following to a `.env` file at the root of your October installation.
-
-```
-RAINLAB_USER_API_PREFIX="/your/custom/prefix"
-```
-
-Additionally, the API can be disabled completely by adding the following:
-
-```
-RAINLAB_USER_API_ENABLE=false
-```
-
-## Middleware
+## Adding Middleware
 
 All endpoints use a base controller that can be extended. This can be used to add middleware that make the responses consistent with the rest of your API. To do this, add the following to your `Plugin.php` file. See the [October documentation](https://octobercms.com/docs/plugin/registration#registering-middleware) for more information on using middleware.
 
