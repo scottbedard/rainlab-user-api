@@ -67,6 +67,8 @@ class AuthControllerTest extends PluginTestCase
 
     public function test_authenticating_as_a_banned_user()
     {
+        UserSettings::set('use_throttle', false);
+
         $user = self::createActivatedUser([
             'email' => 'john@example.com',
             'password' => '12345678',
@@ -79,9 +81,7 @@ class AuthControllerTest extends PluginTestCase
             'password' => '12345678',
         ]);
 
-        // ideally this would be a 405 response
-        // see: https://github.com/rainlab/user-plugin/issues/413
-        $response->assertStatus(500);
+        $response->assertStatus(405);
     }
 
     public function test_authenticating_with_invalid_data()

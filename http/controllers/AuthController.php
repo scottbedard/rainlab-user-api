@@ -62,21 +62,14 @@ class AuthController extends ApiController
 
         Event::fire('rainlab.user.beforeAuthenticate', [$this, $credentials]);
 
-        try {
-            $user = Auth::authenticate($credentials, $remember);
-        } catch (AuthException $e) {
-            Auth::logout();
-        }
+        $user = Auth::authenticate($credentials, $remember);
 
         // check if user is banned
-        // https://github.com/rainlab/user-plugin/issues/413
-        /*
         if ($user->isBanned()) {
             Auth::logout();
 
-            return response(Lang::get('rainlab.user::lang.account.banned', 405));
+            return response(Lang::get('rainlab.user::lang.account.banned'), 405);
         }
-        */
 
         // record ip address
         if ($ipAddress = Request::ip()) {
