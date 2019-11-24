@@ -2,13 +2,13 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/php:7.3-node
+      - image: circleci/php:7.3-cli
     steps:
+      - run: sudo apt-get update
+      - run: sudo apt-get install libpng-dev
       - run:
-          name: Install PHP extensions
-          command: |
-            sudo apt-get install -y libpng-dev
-            sudo docker-php-ext-install gd
+          name: Install PHP Extensions
+          command: sudo docker-php-ext-install gd
       - run:
           name: Clone October
           command: |
