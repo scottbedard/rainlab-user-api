@@ -51,16 +51,13 @@ class AuthController extends ApiController
             'password' => array_get($data, 'password'),
         ];
     
-        switch (Utils::rememberLoginMode()) {
-            case UserSettings::REMEMBER_ALWAYS:
-                $remember = true;
-                break;
-            case UserSettings::REMEMBER_NEVER:
-                $remember = false;
-                break;
-            case UserSettings::REMEMBER_ASK:
-                $remember = (bool) array_get($data, 'remember', false);
-                break;
+        $remember = false;
+        $rememberMode = Utils::rememberLoginMode();
+
+        if ($rememberMode === UserSettings::REMEMBER_ALWAYS) {
+            $remember = true;
+        } elseif ($rememberMode === UserSettings::REMEMBER_ASK) {
+            $remember = (bool) array_get($data, 'remember', false);
         }
 
         Event::fire('rainlab.user.beforeAuthenticate', [$this, $credentials]);
@@ -87,5 +84,23 @@ class AuthController extends ApiController
         }
 
         return $user;
+    }
+
+    /**
+     * Signout.
+     * 
+     * @return Illuminate\Http\Response
+     */
+    public function signout()
+    {
+        $user = Auth::getUser();
+
+        Auth::logout();
+
+        if ($user) {
+            Event::fire('rainlab.user.logout', [$user]);
+        }
+
+        return response('Success', 200);
     }
 }

@@ -65,6 +65,10 @@ public function boot()
 
 Authenticate a user.
 
+###### `ANY: /api/rainlab/user/auth/signout`
+
+Sign out the authenticated user.
+
 ##### `POST: /api/rainlab/user/users`
 
 Create user and trigger activation process.
@@ -88,10 +92,6 @@ Updates information about the authenticated user. This route uses the [`AuthMidd
 ###### `DELETE: /api/rainlab/user/avatar`
 
 Deletes the authenticated user's avatar. This route uses the [`AuthMiddleware`](https://github.com/rainlab/user-plugin/blob/master/classes/AuthMiddleware.php), authentication is required to access it.
-
-###### `ANY: /api/rainlab/user/signout`
-
-Sign out the authenticated user.
 
 ###### `ANY: /api/rainlab/user/stop-impersonating`
 

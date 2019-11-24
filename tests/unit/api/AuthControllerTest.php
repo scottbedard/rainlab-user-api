@@ -131,4 +131,25 @@ class AuthControllerTest extends PluginTestCase
 
         $response->assertStatus(200);
     }
+
+    //
+    // signout
+    //
+    public function test_signing_out()
+    {
+        $user = self::createActivatedUser([
+            'email' => 'john@example.com',
+            'password' => '12345678',
+        ]);
+
+        Auth::login($user);
+        
+        $this->assertTrue(Auth::check());
+
+        $response = $this->get('/api/rainlab/user/auth/signout');
+        
+        $response->assertStatus(200);
+        
+        $this->assertFalse(Auth::check());
+    }
 }
