@@ -82,7 +82,6 @@ class UsersControllerTest extends PluginTestCase
         $sent = false;
 
         Settings::set('activate_mode', Settings::ACTIVATE_USER);
-        // Settings::set('activate_url', 'https://example.com/activate/{code}');
 
         Event::listen('mailer.beforeSend', function ($view, $data) use (&$sent) {
             $user = User::first();
@@ -209,6 +208,69 @@ class UsersControllerTest extends PluginTestCase
         $request->assertStatus(400);
     }
 
+    //
+    // forgot password
+    //
+    public function test_restoring_a_password()
+    {
+        $sent = false;
+
+        $user = self::createActivatedUser([
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => '12345678',
+            'username' => 'john',
+        ]);
+
+        Event::listen('mailer.beforeSend', function ($view, $data) use (&$sent, $user) {
+            $resetUser = User::find($user->id);
+            $code = implode('!', [$resetUser->id, $resetUser->reset_password_code]);
+            $link = str_replace('{code}', $code, Settings::get('password_reset_url'));
+
+            $this->assertArraySubset([
+                'code' => $code,
+                'link' => $link,
+                'name' => $resetUser->name,
+                'username' => $resetUser->username,
+            ], $data);
+
+            $sent = true;
+        });
+
+        $response = $this->post('/api/rainlab/user/users/forgot-password', [
+            'email' => $user->email,
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertTrue($sent);
+    }
+
+    public function test_forgot_password_with_missing_email()
+    {
+        $response = $this->post('/api/rainlab/user/users/forgot-password');
+
+        $response->assertStatus(422);
+    }
+
+    public function test_resetting_guest_password()
+    {
+        $user = self::createActivatedUser([
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => '12345678',
+            'username' => 'john',
+        ]);
+
+        $user->is_guest = true;
+        $user->save();
+        
+        $response = $this->post('/api/rainlab/user/users/forgot-password', [
+            'email' => $user->email,
+        ]);
+
+        $response->assertStatus(400);
+    }
     // read
     // update
     // delete

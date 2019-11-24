@@ -46,6 +46,49 @@ class UsersController extends ApiController
     }
 
     /**
+     * Send a password reset email.
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function forgotPassword()
+    {
+        // validate the request
+        $rules = [
+            'email' => 'required|email|between:6,255'
+        ];
+
+        $validation = Validator::make(post(), $rules);
+
+        if ($validation->fails()) {
+            return response($validation->messages(), 422);
+        }
+
+        // find the user
+        $user = UserModel::findByEmail(post('email'));
+
+        if (!$user || $user->is_guest) {
+            return response(Lang::get('rainlab.user::lang.account.invalid_user'), 400);
+        }
+
+        // send the password reset email
+        $code = implode('!', [$user->id, $user->getResetPasswordCode()]);
+        $link = str_replace('{code}', $code, UserSettings::get('password_reset_url'));
+
+        $data = [
+            'code' => $code,
+            'link' => $link,
+            'name' => $user->name,
+            'username' => $user->username,
+        ];
+
+        Mail::send('rainlab.user::mail.restore', $data, function($message) use ($user) {
+            $message->to($user->email, $user->full_name);
+        });
+        
+        return response('Ok', 200);
+    }
+
+    /**
      * Create a user.
      * 
      * @return \RainLab\User\Models\User
@@ -136,7 +179,7 @@ class UsersController extends ApiController
 
         return UserModel::isRegisterThrottled(Request::ip());
     }
-    
+
     /**
     * Sends the activation email to a user.
     *

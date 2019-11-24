@@ -77,6 +77,10 @@ Create user and trigger activation process.
 
 Activate a new user.
 
+###### `POST: /api/rainlab/users/user/forgot-password`
+
+Send the user a link to reset their password.
+
 ## 0.x Endpoints
 
 > **Note:** We're migrating this plugin to a stable release. These endpoints are deprecated, and will soon be removed.
@@ -104,10 +108,6 @@ Get user information by password reset code.
 ###### `POST: /api/rainlab/user/reset-password`
 
 Reset a user's password.
-
-###### `POST: /api/rainlab/user/send-reset-email`
-
-Initiate the password reset process for a user.
 
 ## License
 

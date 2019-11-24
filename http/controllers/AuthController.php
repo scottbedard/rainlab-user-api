@@ -18,7 +18,7 @@ class AuthController extends ApiController
     /**
      * Authenticate a user.
      * 
-     * @return Illuminate\Http\Response
+     * @return \RainLab\User\Models\User
      */
     public function login()
     {
@@ -89,7 +89,7 @@ class AuthController extends ApiController
     /**
      * Log a user out.
      * 
-     * @return Illuminate\Http\Response
+     * @return \Illuminate\Http\Response
      */
     public function logout()
     {
