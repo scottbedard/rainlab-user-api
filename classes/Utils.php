@@ -9,9 +9,9 @@ class Utils
 {
     /**
      * Create activation link for a user.
-     * 
+     *
      * @param  string
-     * 
+     *
      * @return string
      */
     public static function activationLink(string $code)
@@ -21,9 +21,9 @@ class Utils
 
     /**
      * Create activation code for a user.
-     * 
+     *
      * @param  \RainLab\User\Models\User
-     * 
+     *
      * @return string
      */
     public static function activationCode(UserModel $user)
@@ -33,7 +33,7 @@ class Utils
 
     /**
      * Returns the login model attribute.
-     * 
+     *
      * @return string
      */
     public static function loginAttribute()
@@ -43,7 +43,7 @@ class Utils
 
     /**
      * Returns the login remember mode.
-     * 
+     *
      * @return string
      */
     public static function rememberLoginMode()

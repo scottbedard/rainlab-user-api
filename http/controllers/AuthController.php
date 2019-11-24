@@ -8,17 +8,15 @@ use Bedard\RainLabUserApi\Classes\ApiController;
 use Bedard\RainLabUserApi\Classes\Utils;
 use Event;
 use Lang;
-use October\Rain\Auth\AuthException;
 use RainLab\User\Models\Settings as UserSettings;
 use Request;
 use Validator;
 
 class AuthController extends ApiController
 {
-
     /**
      * Authenticate a user.
-     * 
+     *
      * @return \RainLab\User\Models\User
      */
     public function login()
@@ -37,7 +35,7 @@ class AuthController extends ApiController
         if (!array_key_exists('login', $data)) {
             $data['login'] = post('username', post('email'));
         }
-        
+
         $data['login'] = trim($data['login']);
 
         $validation = Validator::make($data, $rules);
@@ -51,7 +49,7 @@ class AuthController extends ApiController
             'login'    => array_get($data, 'login'),
             'password' => array_get($data, 'password'),
         ];
-    
+
         $remember = false;
         $rememberMode = Utils::rememberLoginMode();
 
@@ -82,7 +80,7 @@ class AuthController extends ApiController
 
     /**
      * Log a user out.
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function logout()
@@ -100,7 +98,7 @@ class AuthController extends ApiController
 
     /**
      * Stop impersonating a user.
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function stopImpersonation()
@@ -110,7 +108,7 @@ class AuthController extends ApiController
         } else {
             Auth::logout();
         }
-        
+
         return response('Success', 200);
     }
 }

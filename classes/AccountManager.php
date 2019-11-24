@@ -10,13 +10,13 @@ class AccountManager
 {
     /**
      * Get the authenticated user.
-     * 
+     *
      * @return \RainLab\User\Models\User
      */
     public static function getAuthenticatedUser()
     {
         if (!Auth::check()) {
-            return null;
+            return;
         }
 
         return self::getUser(Auth::getUser());
@@ -24,7 +24,7 @@ class AccountManager
 
     /**
      * Get a user with a hook for extensibility.
-     * 
+     *
      * @return \RainLab\User\Models\User
      */
     public static function getUser(UserModel $model)

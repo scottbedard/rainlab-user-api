@@ -2,8 +2,8 @@
 
 namespace Bedard\RainLabUserApi\Classes;
 
-use Illuminate\Routing\Controller;
 use Closure;
+use Illuminate\Routing\Controller;
 
 class ApiController extends Controller
 {
@@ -24,7 +24,7 @@ class ApiController extends Controller
 
     /**
      * Extend this object properties upon construction.
-     * 
+     *
      * @param Closure $callback
      */
     public static function extend(Closure $callback)

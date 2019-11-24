@@ -16,15 +16,15 @@ class AuthControllerTest extends PluginTestCase
     public function test_email_authentication()
     {
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
+            'email'    => 'john@example.com',
             'password' => '12345678',
         ]);
 
         $beforeAuthenticate = false;
-        
+
         Event::listen('rainlab.user.beforeAuthenticate', function ($controller, $credentials) use (&$beforeAuthenticate, $user) {
             $this->assertArraySubset([
-                'login' => $user->email,
+                'login'    => $user->email,
                 'password' => '12345678',
             ], $credentials);
 
@@ -32,7 +32,7 @@ class AuthControllerTest extends PluginTestCase
         });
 
         $response = $this->post('/api/rainlab/user/auth/login', [
-            'email' => $user->email,
+            'email'    => $user->email,
             'password' => '12345678',
         ]);
 
@@ -70,14 +70,14 @@ class AuthControllerTest extends PluginTestCase
         UserSettings::set('use_throttle', false);
 
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
+            'email'    => 'john@example.com',
             'password' => '12345678',
         ]);
 
         $user->ban();
 
         $response = $this->post('/api/rainlab/user/auth/login', [
-            'email' => $user->email,
+            'email'    => $user->email,
             'password' => '12345678',
         ]);
 
@@ -87,7 +87,7 @@ class AuthControllerTest extends PluginTestCase
     public function test_authenticating_with_invalid_data()
     {
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
+            'email'    => 'john@example.com',
             'password' => '12345678',
         ]);
 
@@ -103,12 +103,12 @@ class AuthControllerTest extends PluginTestCase
         UserSettings::set('remember_login', UserSettings::REMEMBER_NEVER);
 
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
+            'email'    => 'john@example.com',
             'password' => '12345678',
         ]);
 
         $response = $this->post('/api/rainlab/user/auth/login', [
-            'email' => $user->email,
+            'email'    => $user->email,
             'password' => '12345678',
         ]);
 
@@ -120,12 +120,12 @@ class AuthControllerTest extends PluginTestCase
         UserSettings::set('remember_login', UserSettings::REMEMBER_ASK);
 
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
+            'email'    => 'john@example.com',
             'password' => '12345678',
         ]);
 
         $response = $this->post('/api/rainlab/user/auth/login', [
-            'email' => $user->email,
+            'email'    => $user->email,
             'password' => '12345678',
             'remember' => true,
         ]);
@@ -141,12 +141,12 @@ class AuthControllerTest extends PluginTestCase
         $logout = false;
 
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
+            'email'    => 'john@example.com',
             'password' => '12345678',
         ]);
 
         Auth::login($user);
-        
+
         $this->assertTrue(Auth::check());
 
         Event::listen('rainlab.user.logout', function ($logoutUser) use (&$logout, $user) {
@@ -157,7 +157,7 @@ class AuthControllerTest extends PluginTestCase
         });
 
         $response = $this->get('/api/rainlab/user/auth/logout');
-        
+
         $response->assertStatus(200);
 
         $this->assertFalse(Auth::check());
@@ -170,7 +170,7 @@ class AuthControllerTest extends PluginTestCase
     public function test_stop_impersonating_without_impersonating()
     {
         $user = self::createActivatedUser([
-            'email' => 'sally@example.com',
+            'email'    => 'sally@example.com',
             'password' => '12345678',
         ]);
 
@@ -187,15 +187,15 @@ class AuthControllerTest extends PluginTestCase
     public function test_stopping_impersonation()
     {
         $user1 = self::createActivatedUser([
-            'email' => 'sally@example.com',
+            'email'    => 'sally@example.com',
             'password' => '12345678',
         ]);
 
         $user2 = self::createActivatedUser([
-            'email' => 'john@example.com',
+            'email'    => 'john@example.com',
             'password' => '12345678',
         ]);
-        
+
         // sign in as user 1, and impersonate user 2
         Auth::login($user1);
         Auth::impersonate($user2);
@@ -203,7 +203,7 @@ class AuthControllerTest extends PluginTestCase
 
         $response = $this->get('/api/rainlab/user/auth/stop-impersonation');
         $response->assertStatus(200);
-        
+
         $this->assertTrue(Auth::check());
         $this->assertFalse(Auth::isImpersonator());
     }
