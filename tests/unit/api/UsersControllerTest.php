@@ -303,6 +303,52 @@ class UsersControllerTest extends PluginTestCase
         $this->assertEquals($user->id, $authedUser->id);
     }
 
+    public function test_resetting_password_without_email()
+    {
+        $response = $this->post('/api/rainlab/user/users/reset-password');
+
+        $response->assertStatus(422);
+    }
+
+    public function test_invalid_password_reset_code()
+    {
+        $response = $this->post('/api/rainlab/user/users/reset-password', [
+            'code' => '1!',
+            'password' => 'helloworld',
+        ]);
+
+        $response->assertStatus(400);
+    }
+
+    public function test_resetting_password_for_user_that_doesnt_exist()
+    {
+        $response = $this->post('/api/rainlab/user/users/reset-password', [
+            'code' => '1!abc123',
+            'password' => 'helloworld',
+        ]);
+
+        $response->assertStatus(400);
+    }
+
+    public function test_resetting_password_with_incorrect_code()
+    {
+        $user = self::createActivatedUser([
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => '12345678',
+            'username' => 'john',
+        ]);
+
+        $user->getResetPasswordCode();
+
+        $response = $this->post('/api/rainlab/user/users/reset-password', [
+            'code' => implode('!', [$user->id, 'badcode']),
+            'password' => 'helloworld',
+        ]);
+
+        $response->assertStatus(400);
+    }
+
     // read
     // update
     // delete
