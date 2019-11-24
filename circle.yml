@@ -6,7 +6,9 @@ jobs:
     steps:
       - run:
           name: Install PHP extensions
-          command: sudo docker-php-ext-install gd
+          command: |
+            sudo apt-get install -y libpng-dev
+            sudo docker-php-ext-install gd
       - run:
           name: Clone October
           command: |
