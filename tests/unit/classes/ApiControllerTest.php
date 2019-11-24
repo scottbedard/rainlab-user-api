@@ -14,7 +14,7 @@ class ApiControllerTest extends PluginTestCase
         });
 
         $response = $this->get('/api/rainlab/user/auth/logout');
-        
+
         $this->assertEquals('Hello from the test middleware!', $response->getContent());
     }
 }

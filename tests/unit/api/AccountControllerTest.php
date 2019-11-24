@@ -4,7 +4,6 @@ namespace Bedard\RainLabUserApi\Tests\Unit\Api;
 
 use Auth;
 use Bedard\RainLabUserApi\Tests\PluginTestCase;
-use Event;
 use Illuminate\Http\UploadedFile;
 use RainLab\User\Models\Settings as UserSettings;
 use RainLab\User\Models\User as UserModel;
@@ -17,7 +16,7 @@ class AccountControllerTest extends PluginTestCase
     public function test_getting_user_information()
     {
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
+            'email'    => 'john@example.com',
             'password' => '12345678',
         ]);
 
@@ -36,7 +35,7 @@ class AccountControllerTest extends PluginTestCase
     public function test_updating_user_information()
     {
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
+            'email'    => 'john@example.com',
             'password' => '12345678',
         ]);
 
@@ -57,19 +56,19 @@ class AccountControllerTest extends PluginTestCase
     public function test_unsafe_password_change()
     {
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
+            'email'    => 'john@example.com',
             'password' => '12345678',
         ]);
 
         Auth::login($user);
 
         $response = $this->post('/api/rainlab/user/account', [
-            'password' => 'helloworld',
+            'password'              => 'helloworld',
             'password_confirmation' => 'helloworld',
         ]);
 
         $auth = Auth::authenticate([
-            'login' => 'john@example.com',
+            'login'    => 'john@example.com',
             'password' => 'helloworld',
         ]);
 
@@ -81,20 +80,20 @@ class AccountControllerTest extends PluginTestCase
         UserSettings::set('safe_password_updates', true);
 
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
+            'email'    => 'john@example.com',
             'password' => '12345678',
         ]);
 
         Auth::login($user);
 
         $response = $this->post('/api/rainlab/user/account', [
-            'password' => 'helloworld',
+            'password'              => 'helloworld',
             'password_confirmation' => 'helloworld',
-            'password_current' => '12345678',
+            'password_current'      => '12345678',
         ]);
 
         $auth = Auth::authenticate([
-            'login' => 'john@example.com',
+            'login'    => 'john@example.com',
             'password' => 'helloworld',
         ]);
 
@@ -106,25 +105,25 @@ class AccountControllerTest extends PluginTestCase
         UserSettings::set('safe_password_updates', true);
 
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
+            'email'    => 'john@example.com',
             'password' => '12345678',
         ]);
 
         Auth::login($user);
 
         $response = $this->post('/api/rainlab/user/account', [
-            'password' => 'helloworld',
+            'password'              => 'helloworld',
             'password_confirmation' => 'helloworld',
-            'password_current' => 'wrongpassword',
+            'password_current'      => 'wrongpassword',
         ]);
-        
+
         $response->assertStatus(403);
     }
 
     public function test_avatar_update()
     {
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
+            'email'    => 'john@example.com',
             'password' => '12345678',
         ]);
 
@@ -147,7 +146,7 @@ class AccountControllerTest extends PluginTestCase
     public function test_deleting_an_avatar()
     {
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
+            'email'    => 'john@example.com',
             'password' => '12345678',
         ]);
 

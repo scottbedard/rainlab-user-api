@@ -5,9 +5,7 @@ namespace Bedard\RainLabUserApi\Tests\Unit\Api;
 use Auth;
 use Bedard\RainLabUserApi\Classes\Utils;
 use Bedard\RainLabUserApi\Tests\PluginTestCase;
-use Config;
 use Event;
-use Mail;
 use RainLab\User\Models\Settings;
 use RainLab\User\Models\User;
 
@@ -22,9 +20,9 @@ class UsersControllerTest extends PluginTestCase
         $registerFired = false;
 
         $params = [
-            'email' => 'john@example.com',
-            'name' => 'John Doe',
-            'password' => '12345678',
+            'email'                 => 'john@example.com',
+            'name'                  => 'John Doe',
+            'password'              => '12345678',
             'password_confirmation' => '12345678',
         ];
 
@@ -33,7 +31,7 @@ class UsersControllerTest extends PluginTestCase
             $this->assertArraySubset($params, $data);
         });
 
-        Event::listen('rainlab.user.register', function ($user, $data) use(&$beforeRegisterFired, &$registerFired, $params) {
+        Event::listen('rainlab.user.register', function ($user, $data) use (&$beforeRegisterFired, &$registerFired, $params) {
             $registerFired = true;
             $this->assertTrue($beforeRegisterFired);
             $this->assertInstanceOf(User::class, $user);
@@ -52,11 +50,11 @@ class UsersControllerTest extends PluginTestCase
     public function test_registering_with_invalid_login_attribute()
     {
         Settings::set('login_attribute', Settings::LOGIN_USERNAME);
-        
+
         $response = $this->post('/api/rainlab/user/users', [
-            'email' => 'john@example.com',
-            'name' => 'John Doe',
-            'password' => '12345678',
+            'email'                 => 'john@example.com',
+            'name'                  => 'John Doe',
+            'password'              => '12345678',
             'password_confirmation' => '12345678',
         ]);
 
@@ -68,9 +66,9 @@ class UsersControllerTest extends PluginTestCase
         Settings::set('allow_registration', false);
 
         $response = $this->post('/api/rainlab/user/users', [
-            'email' => 'john@example.com',
-            'name' => 'John Doe',
-            'password' => '12345678',
+            'email'                 => 'john@example.com',
+            'name'                  => 'John Doe',
+            'password'              => '12345678',
             'password_confirmation' => '12345678',
         ]);
 
@@ -97,9 +95,9 @@ class UsersControllerTest extends PluginTestCase
         });
 
         $response = $this->post('/api/rainlab/user/users', [
-            'email' => 'john@example.com',
-            'name' => 'John Doe',
-            'password' => '12345678',
+            'email'                 => 'john@example.com',
+            'name'                  => 'John Doe',
+            'password'              => '12345678',
             'password_confirmation' => '12345678',
         ]);
 
@@ -111,34 +109,34 @@ class UsersControllerTest extends PluginTestCase
         Settings::set('use_register_throttle', false);
 
         $this->post('/api/rainlab/user/users', [
-            'email' => 'one@example.com',
-            'password' => '12345678',
+            'email'                 => 'one@example.com',
+            'password'              => '12345678',
             'password_confirmation' => '12345678',
         ])->assertStatus(200);
 
         $this->post('/api/rainlab/user/users', [
-            'email' => 'two@example.com',
-            'password' => '12345678',
+            'email'                 => 'two@example.com',
+            'password'              => '12345678',
             'password_confirmation' => '12345678',
         ])->assertStatus(200);
 
         $this->post('/api/rainlab/user/users', [
-            'email' => 'three@example.com',
-            'password' => '12345678',
+            'email'                 => 'three@example.com',
+            'password'              => '12345678',
             'password_confirmation' => '12345678',
         ])->assertStatus(200);
 
         $this->post('/api/rainlab/user/users', [
-            'email' => 'four@example.com',
-            'password' => '12345678',
+            'email'                 => 'four@example.com',
+            'password'              => '12345678',
             'password_confirmation' => '12345678',
         ])->assertStatus(200);
 
         Settings::set('use_register_throttle', true);
 
         $this->post('/api/rainlab/user/users', [
-            'email' => 'five@example.com',
-            'password' => '12345678',
+            'email'                 => 'five@example.com',
+            'password'              => '12345678',
             'password_confirmation' => '12345678',
         ])->assertStatus(429);
 
@@ -148,7 +146,7 @@ class UsersControllerTest extends PluginTestCase
     public function test_registering_without_password_confirmation()
     {
         $response = $this->post('/api/rainlab/user/users', [
-            'email' => 'sally@example.com',
+            'email'    => 'sally@example.com',
             'password' => '12345678',
         ]);
 
@@ -158,7 +156,7 @@ class UsersControllerTest extends PluginTestCase
         $this->assertEquals(1, User::count());
         $this->assertEquals('sally@example.com', $data['email']);
     }
-    
+
     //
     // activate
     //
@@ -166,16 +164,16 @@ class UsersControllerTest extends PluginTestCase
     {
         Settings::set('activate_mode', Settings::ACTIVATE_USER);
         Settings::set('activate_redirect', '/welcome');
-        
+
         $this->post('/api/rainlab/user/users', [
-            'email' => 'john@example.com',
+            'email'    => 'john@example.com',
             'password' => '12345678',
         ]);
 
         $user = User::first();
         $code = implode('!', [$user->id, $user->activation_code]);
 
-        $request = $this->get('/api/rainlab/user/users/activate/' . $code);
+        $request = $this->get('/api/rainlab/user/users/activate/'.$code);
         $request->assertRedirect('/welcome');
 
         $this->assertEquals($user->id, Auth::getUser()->id);
@@ -216,8 +214,8 @@ class UsersControllerTest extends PluginTestCase
         $sent = false;
 
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
-            'name' => 'John Doe',
+            'email'    => 'john@example.com',
+            'name'     => 'John Doe',
             'password' => '12345678',
             'username' => 'john',
         ]);
@@ -228,9 +226,9 @@ class UsersControllerTest extends PluginTestCase
             $link = str_replace('{code}', $code, Settings::get('password_reset_url'));
 
             $this->assertArraySubset([
-                'code' => $code,
-                'link' => $link,
-                'name' => $resetUser->name,
+                'code'     => $code,
+                'link'     => $link,
+                'name'     => $resetUser->name,
                 'username' => $resetUser->username,
             ], $data);
 
@@ -256,8 +254,8 @@ class UsersControllerTest extends PluginTestCase
     public function test_resetting_guest_password()
     {
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
-            'name' => 'John Doe',
+            'email'    => 'john@example.com',
+            'name'     => 'John Doe',
             'password' => '12345678',
             'username' => 'john',
         ]);
@@ -278,8 +276,8 @@ class UsersControllerTest extends PluginTestCase
     public function test_resetting_a_password()
     {
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
-            'name' => 'John Doe',
+            'email'    => 'john@example.com',
+            'name'     => 'John Doe',
             'password' => '12345678',
             'username' => 'john',
         ]);
@@ -287,7 +285,7 @@ class UsersControllerTest extends PluginTestCase
         $code = $user->getResetPasswordCode();
 
         $response = $this->post('/api/rainlab/user/users/reset-password', [
-            'code' => implode('!', [$user->id, $code]),
+            'code'     => implode('!', [$user->id, $code]),
             'password' => 'helloworld',
         ]);
 
@@ -296,10 +294,10 @@ class UsersControllerTest extends PluginTestCase
         Settings::set('login_attribute', Settings::LOGIN_EMAIL);
 
         $authedUser = Auth::authenticate([
-            'login' => $user->email,
+            'login'    => $user->email,
             'password' => 'helloworld',
         ]);
-        
+
         $this->assertEquals($user->id, $authedUser->id);
     }
 
@@ -313,7 +311,7 @@ class UsersControllerTest extends PluginTestCase
     public function test_invalid_password_reset_code()
     {
         $response = $this->post('/api/rainlab/user/users/reset-password', [
-            'code' => 'foobar',
+            'code'     => 'foobar',
             'password' => 'helloworld',
         ]);
 
@@ -323,7 +321,7 @@ class UsersControllerTest extends PluginTestCase
     public function test_resetting_password_for_user_that_doesnt_exist()
     {
         $response = $this->post('/api/rainlab/user/users/reset-password', [
-            'code' => '1!abc123',
+            'code'     => '1!abc123',
             'password' => 'helloworld',
         ]);
 
@@ -333,8 +331,8 @@ class UsersControllerTest extends PluginTestCase
     public function test_resetting_password_with_incorrect_code()
     {
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
-            'name' => 'John Doe',
+            'email'    => 'john@example.com',
+            'name'     => 'John Doe',
             'password' => '12345678',
             'username' => 'john',
         ]);
@@ -342,7 +340,7 @@ class UsersControllerTest extends PluginTestCase
         $user->getResetPasswordCode();
 
         $response = $this->post('/api/rainlab/user/users/reset-password', [
-            'code' => implode('!', [$user->id, 'abc123']),
+            'code'     => implode('!', [$user->id, 'abc123']),
             'password' => 'helloworld',
         ]);
 
@@ -352,8 +350,8 @@ class UsersControllerTest extends PluginTestCase
     public function test_resetting_password_with_malformed_code()
     {
         $user = self::createActivatedUser([
-            'email' => 'john@example.com',
-            'name' => 'John Doe',
+            'email'    => 'john@example.com',
+            'name'     => 'John Doe',
             'password' => '12345678',
             'username' => 'john',
         ]);
@@ -361,7 +359,7 @@ class UsersControllerTest extends PluginTestCase
         $user->getResetPasswordCode();
 
         $response = $this->post('/api/rainlab/user/users/reset-password', [
-            'code' => ' ! ',
+            'code'     => ' ! ',
             'password' => 'helloworld',
         ]);
 

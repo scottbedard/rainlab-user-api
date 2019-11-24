@@ -13,7 +13,7 @@ class AccountManagerTest extends PluginTestCase
     public function test_getting_authenticated_user_with_event_hook()
     {
         Auth::login(self::createActivatedUser([
-            'email' => 'john@example.com',
+            'email'    => 'john@example.com',
             'password' => '12345678',
         ]));
 
@@ -22,7 +22,7 @@ class AccountManagerTest extends PluginTestCase
         });
 
         $user = AccountManager::getAuthenticatedUser();
-        
+
         $this->assertInstanceOf(UserModel::class, $user);
         $this->assertEquals('bar', $user->foo);
     }

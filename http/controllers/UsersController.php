@@ -18,8 +18,8 @@ class UsersController extends ApiController
 {
     /**
      * Activate a user.
-     * 
-     * @param  string   $idCode
+     *
+     * @param string $idCode
      */
     public function activate($idCode)
     {
@@ -48,14 +48,14 @@ class UsersController extends ApiController
 
     /**
      * Send a password reset email.
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function forgotPassword()
     {
         // validate the request
         $rules = [
-            'email' => 'required|email|between:6,255'
+            'email' => 'required|email|between:6,255',
         ];
 
         $validation = Validator::make(post(), $rules);
@@ -76,22 +76,22 @@ class UsersController extends ApiController
         $link = str_replace('{code}', $code, UserSettings::get('password_reset_url'));
 
         $data = [
-            'code' => $code,
-            'link' => $link,
-            'name' => $user->name,
+            'code'     => $code,
+            'link'     => $link,
+            'name'     => $user->name,
             'username' => $user->username,
         ];
 
-        Mail::send('rainlab.user::mail.restore', $data, function($message) use ($user) {
+        Mail::send('rainlab.user::mail.restore', $data, function ($message) use ($user) {
             $message->to($user->email, $user->full_name);
         });
-        
+
         return response('Ok', 200);
     }
 
     /**
      * Reset a user's password.
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function resetPassword()
@@ -99,7 +99,7 @@ class UsersController extends ApiController
         // validate the request
         $rules = [
             'code'     => 'required',
-            'password' => 'required|between:' . UserModel::getMinPasswordLength() . ',255',
+            'password' => 'required|between:'.UserModel::getMinPasswordLength().',255',
         ];
 
         $validation = Validator::make(post(), $rules);
@@ -137,7 +137,7 @@ class UsersController extends ApiController
 
     /**
      * Create a user.
-     * 
+     *
      * @return \RainLab\User\Models\User
      */
     public function store()
@@ -205,8 +205,8 @@ class UsersController extends ApiController
 
     /**
      * Returns true if registration is enabled.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     protected function canRegister()
     {
@@ -215,8 +215,8 @@ class UsersController extends ApiController
 
     /**
      * Returns true if the registration is throttled.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     protected function isRegisterThrottled()
     {
@@ -228,25 +228,25 @@ class UsersController extends ApiController
     }
 
     /**
-    * Sends the activation email to a user.
-    *
-    * @param  User $user
-    *
-    * @return void
-    */
-   protected function sendActivationEmail(UserModel $user)
-   {
-       $code = Utils::activationCode($user);
-       $link = Utils::activationLink($code);
+     * Sends the activation email to a user.
+     *
+     * @param  User $user
+     *
+     * @return void
+     */
+    protected function sendActivationEmail(UserModel $user)
+    {
+        $code = Utils::activationCode($user);
+        $link = Utils::activationLink($code);
 
-       $data = [
+        $data = [
            'code' => $code,
            'link' => $link,
            'name' => $user->name,
        ];
 
-       Mail::send('rainlab.user::mail.activate', $data, function($message) use ($user) {
-           $message->to($user->email, $user->name);
-       });
-   }
+        Mail::send('rainlab.user::mail.activate', $data, function ($message) use ($user) {
+            $message->to($user->email, $user->name);
+        });
+    }
 }

@@ -7,14 +7,13 @@ use Bedard\RainLabUserApi\Classes\AccountManager;
 use Bedard\RainLabUserApi\Classes\ApiController;
 use Input;
 use Lang;
-use October\Rain\Auth\AuthException;
 use RainLab\User\Models\Settings as UserSettings;
 
 class AccountController extends ApiController
 {
     /**
      * Delete a user's avatar.
-     * 
+     *
      * @return \RainLab\User\Models\User
      */
     public function deleteAvatar()
@@ -30,7 +29,7 @@ class AccountController extends ApiController
 
     /**
      * Return the authenticated user.
-     * 
+     *
      * @return \RainLab\User\Models\User
      */
     public function index()
@@ -40,7 +39,7 @@ class AccountController extends ApiController
 
     /**
      * Update the authenticated user.
-     * 
+     *
      * @return \RainLab\User\Models\User
      */
     public function update()
@@ -48,7 +47,7 @@ class AccountController extends ApiController
         $data = post();
 
         $user = Auth::getUser();
-        
+
         // check the current password if safe password updates are enabled
         $safePasswordUpdates = UserSettings::get('safe_password_updates', false);
 
@@ -65,7 +64,7 @@ class AccountController extends ApiController
 
         $user->fill($data);
         $user->save();
-        
+
         return AccountManager::getAuthenticatedUser();
     }
 }

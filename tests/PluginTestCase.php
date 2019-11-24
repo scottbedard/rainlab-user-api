@@ -15,7 +15,7 @@ class PluginTestCase extends BasePluginTestCase
 {
     /**
      * Helper to create activated users.
-     * 
+     *
      * @return \RainLab\User\Models\User
      */
     public function createActivatedUser($data = [])
@@ -41,7 +41,7 @@ class PluginTestCase extends BasePluginTestCase
 
     /**
      * Set up function, called before each test.
-     * 
+     *
      * @return void
      */
     public function setUp()
@@ -51,6 +51,7 @@ class PluginTestCase extends BasePluginTestCase
         // register model factories
         App::singleton(Factory::class, function ($app) {
             $faker = $app->make(Generator::class);
+
             return Factory::construct($faker, plugins_path('bedard/rainlabuserapi/factories'));
         });
 
@@ -65,7 +66,7 @@ class PluginTestCase extends BasePluginTestCase
 
     /**
      * Tear down function, called after each test.
-     * 
+     *
      * @return void
      */
     public function tearDown()
