@@ -17,6 +17,7 @@ if (config('bedard.rainlabuserapi::apiEnable')) {
             Route::post('', 'Bedard\RainLabUserApi\Http\Controllers\UsersController@store');
             Route::get('activate/{code}', 'Bedard\RainLabUserApi\Http\Controllers\UsersController@activate');
             Route::post('forgot-password', 'Bedard\RainLabUserApi\Http\Controllers\UsersController@forgotPassword');
+            Route::post('reset-password', 'Bedard\RainLabUserApi\Http\Controllers\UsersController@resetPassword');
         });
     });
 }

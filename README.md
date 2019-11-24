@@ -81,6 +81,10 @@ Activate a new user.
 
 Send the user a link to reset their password.
 
+###### `POST: /api/rainlab/users/user/reset-password`
+
+Reset a user's password.
+
 ## 0.x Endpoints
 
 > **Note:** We're migrating this plugin to a stable release. These endpoints are deprecated, and will soon be removed.
@@ -100,10 +104,6 @@ Deletes the authenticated user's avatar. This route uses the [`AuthMiddleware`](
 ###### `ANY: /api/rainlab/user/stop-impersonating`
 
 Stop impersonating a user
-
-###### `GET: /api/rainlab/user/reset-password`
-
-Get user information by password reset code.
 
 ###### `POST: /api/rainlab/user/reset-password`
 

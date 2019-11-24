@@ -89,6 +89,52 @@ class UsersController extends ApiController
     }
 
     /**
+     * Reset a user's password.
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function resetPassword()
+    {
+        // validate the request
+        $rules = [
+            'code'     => 'required',
+            'password' => 'required|between:' . UserModel::getMinPasswordLength() . ',255',
+        ];
+
+        $validation = Validator::make(post(), $rules);
+
+        if ($validation->fails()) {
+            return response($validation->messages(), 422);
+        }
+
+        $error = Lang::get('rainlab.user::lang.account.invalid_activation_code');
+
+        // break up the code parts
+        $parts = explode('!', post('code'));
+
+        if (count($parts) != 2) {
+            return response($error, 400);
+        }
+
+        list($userId, $code) = $parts;
+
+        if (!strlen(trim($userId)) || !strlen(trim($code)) || !$code) {
+            return response($error, 400);
+        }
+
+        // reset the users password
+        if (!$user = Auth::findUserById($userId)) {
+            return response($error, 400);
+        }
+
+        if (!$user->attemptResetPassword($code, post('password'))) {
+            return response($error, 400);
+        }
+
+        return response('Ok', 200);
+    }
+
+    /**
      * Create a user.
      * 
      * @return \RainLab\User\Models\User

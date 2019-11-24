@@ -264,13 +264,45 @@ class UsersControllerTest extends PluginTestCase
 
         $user->is_guest = true;
         $user->save();
-        
+
         $response = $this->post('/api/rainlab/user/users/forgot-password', [
             'email' => $user->email,
         ]);
 
         $response->assertStatus(400);
     }
+
+    //
+    // reset password
+    //
+    public function test_resetting_a_password()
+    {
+        $user = self::createActivatedUser([
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => '12345678',
+            'username' => 'john',
+        ]);
+
+        $code = $user->getResetPasswordCode();
+
+        $response = $this->post('/api/rainlab/user/users/reset-password', [
+            'code' => implode('!', [$user->id, $code]),
+            'password' => 'helloworld',
+        ]);
+
+        $response->assertStatus(200);
+
+        Settings::set('login_attribute', Settings::LOGIN_EMAIL);
+
+        $authedUser = Auth::authenticate([
+            'login' => $user->email,
+            'password' => 'helloworld',
+        ]);
+        
+        $this->assertEquals($user->id, $authedUser->id);
+    }
+
     // read
     // update
     // delete
