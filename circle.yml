@@ -5,9 +5,8 @@ jobs:
       - image: circleci/php:7.3-node
     steps:
       - run:
-          name: Enable PHP extensions
-          command: |
-            sudo apt-get install -y php-gd
+          name: Install PHP extensions
+          command: docker-php-ext-install gd
       - run:
           name: Clone October
           command: |
