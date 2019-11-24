@@ -19,6 +19,11 @@ if (config('bedard.rainlabuserapi::apiEnable')) {
             Route::post('forgot-password', 'Bedard\RainLabUserApi\Http\Controllers\UsersController@forgotPassword');
             Route::post('reset-password', 'Bedard\RainLabUserApi\Http\Controllers\UsersController@resetPassword');
         });
+
+        // account
+        Route::prefix('account')->middleware('RainLab\User\Classes\AuthMiddleware')->group(function () {
+            Route::get('', 'Bedard\RainLabUserApi\Http\Controllers\AccountController@index');
+        });
     });
 }
 

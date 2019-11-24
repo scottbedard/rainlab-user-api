@@ -85,13 +85,13 @@ Send the user a link to reset their password.
 
 Reset a user's password.
 
+###### `GET: /api/rainlab/users/account`
+
+Get information about the authenticated user. This route uses the [`AuthMiddleware`](https://github.com/rainlab/user-plugin/blob/master/classes/AuthMiddleware.php), authentication is required to access it.
+
 ## 0.x Endpoints
 
 > **Note:** We're migrating this plugin to a stable release. These endpoints are deprecated, and will soon be removed.
-
-###### `GET: /api/rainlab/user`
-
-Get information about the authenticated user. This route uses the [`AuthMiddleware`](https://github.com/rainlab/user-plugin/blob/master/classes/AuthMiddleware.php), authentication is required to access it.
 
 ###### `POST: /api/rainlab/user`
 
@@ -104,10 +104,6 @@ Deletes the authenticated user's avatar. This route uses the [`AuthMiddleware`](
 ###### `ANY: /api/rainlab/user/stop-impersonating`
 
 Stop impersonating a user
-
-###### `POST: /api/rainlab/user/reset-password`
-
-Reset a user's password.
 
 ## License
 
