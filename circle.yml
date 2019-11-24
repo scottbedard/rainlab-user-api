@@ -5,6 +5,10 @@ jobs:
       - image: circleci/php:7.3-node
     steps:
       - run:
+          name: Enable PHP extensions
+          command: |
+            sudo apt-get install -y php-gd
+      - run:
           name: Clone October
           command: |
             git clone https://github.com/octobercms/october.git
