@@ -93,13 +93,13 @@ Get information about the authenticated user. This route uses the [`AuthMiddlewa
 
 Updates information about the authenticated user. This route uses the [`AuthMiddleware`](https://github.com/rainlab/user-plugin/blob/master/classes/AuthMiddleware.php), authentication is required to access it. When changing passwords with safe password updates enabled, the user's current password must be included in the request as `password_current`.
 
+##### `DELETE: /api/rainlab/users/account/avatar`
+
+Deletes the authenticated user's avatar. This route uses the [`AuthMiddleware`](https://github.com/rainlab/user-plugin/blob/master/classes/AuthMiddleware.php), authentication is required to access it.
+
 ## 0.x Endpoints
 
 > **Note:** We're migrating this plugin to a stable release. These endpoints are deprecated, and will soon be removed.
-
-##### `DELETE: /api/rainlab/user/avatar`
-
-Deletes the authenticated user's avatar. This route uses the [`AuthMiddleware`](https://github.com/rainlab/user-plugin/blob/master/classes/AuthMiddleware.php), authentication is required to access it.
 
 ##### `ANY: /api/rainlab/user/stop-impersonating`
 

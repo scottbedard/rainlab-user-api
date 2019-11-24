@@ -3,6 +3,7 @@
 namespace Bedard\RainLabUserApi\Http\Controllers;
 
 use Auth;
+use Bedard\RainLabUserApi\Classes\AccountManager;
 use Bedard\RainLabUserApi\Classes\ApiController;
 use Input;
 use Lang;
@@ -12,13 +13,29 @@ use RainLab\User\Models\Settings as UserSettings;
 class AccountController extends ApiController
 {
     /**
+     * Delete a user's avatar.
+     * 
+     * @return \RainLab\User\Models\User
+     */
+    public function deleteAvatar()
+    {
+        $user = Auth::getUser();
+
+        if ($user->avatar) {
+            $user->avatar->delete();
+        }
+
+        return AccountManager::getAuthenticatedUser();
+    }
+
+    /**
      * Return the authenticated user.
      * 
      * @return \RainLab\User\Models\User
      */
     public function index()
     {
-        return Auth::getUser();
+        return AccountManager::getAuthenticatedUser();
     }
 
     /**
@@ -49,6 +66,6 @@ class AccountController extends ApiController
         $user->fill($data);
         $user->save();
         
-        return $user;
+        return AccountManager::getAuthenticatedUser();
     }
 }

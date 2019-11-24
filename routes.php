@@ -22,6 +22,7 @@ if (config('bedard.rainlabuserapi::apiEnable')) {
 
         // account
         Route::prefix('account')->middleware('RainLab\User\Classes\AuthMiddleware')->group(function () {
+            Route::delete('avatar', 'Bedard\RainLabUserApi\Http\Controllers\AccountController@deleteAvatar');
             Route::get('', 'Bedard\RainLabUserApi\Http\Controllers\AccountController@index');
             Route::post('', 'Bedard\RainLabUserApi\Http\Controllers\AccountController@update');
         });

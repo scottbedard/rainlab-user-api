@@ -140,4 +140,31 @@ class AccountControllerTest extends PluginTestCase
 
         $this->assertNotNull($user->avatar);
     }
+
+    //
+    // delete avatar
+    //
+    public function test_deleting_an_avatar()
+    {
+        $user = self::createActivatedUser([
+            'email' => 'john@example.com',
+            'password' => '12345678',
+        ]);
+
+        Auth::login($user);
+
+        // upload an avatar
+        $this->post('/api/rainlab/user/account', [
+            'avatar' => UploadedFile::fake()->image(plugins_path('bedard/rainlabuserapi/tests/avatar.png')),
+        ]);
+
+        $this->assertNotNull($user->avatar);
+
+        $response = $this->delete('/api/rainlab/user/account/avatar');
+        $response->assertStatus(200);
+        $data = json_decode($response->getContent(), true);
+
+        $this->assertNull(UserModel::find($user->id)->avatar);
+        $this->assertEquals($user->id, $data['id']);
+    }
 }
