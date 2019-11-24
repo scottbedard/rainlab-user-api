@@ -42,7 +42,7 @@ use Bedard\RainLabUserApi\Classes\AccountManager;
 $user = AccountManager::getAuthenticatedUser();
 ```
 
-Using this method to fetch the `User` model will trigger a `bedard.rainlabuserapi.afterGetUser` event. This can be useful useful when other data needs to be loaded with the user. As an example, here we'll configure the API to load the user's avatar.
+Using this method to fetch the `User` model will trigger a `bedard.rainlabuserapi.afterGetUser` event. This can be useful when other data is needed with the user. As an example, here we'll configure the API to load the user's avatar.
 
 ```php
 public function boot()
