@@ -6,10 +6,11 @@
 
 A simple and extendable HTTP API for [RainLab.User](https://github.com/rainlab/user-plugin).
 
-- [Installation](#installation)
+- [Installation](#installation--configuration)
 - [Basic Usage](#basic-usage)
 - [Middleware](#adding-middleware)
 - [Endpoints](#endpoints)
+- [License](#license)
 
 ## Installation & configuration
 
