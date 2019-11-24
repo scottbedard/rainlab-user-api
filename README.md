@@ -69,7 +69,11 @@ Authenticate a user.
 
 Log out the authenticated user.
 
-##### `POST: /api/rainlab/user/users`
+##### `ANY: /api/rainlab/users/auth/stop-impersonation`
+
+Stop impersonating a user.
+
+##### `POST: /api/rainlab/users/user`
 
 Create user and trigger activation process.
 
@@ -96,14 +100,6 @@ Updates information about the authenticated user. This route uses the [`AuthMidd
 ##### `DELETE: /api/rainlab/users/account/avatar`
 
 Deletes the authenticated user's avatar. This route uses the [`AuthMiddleware`](https://github.com/rainlab/user-plugin/blob/master/classes/AuthMiddleware.php), authentication is required to access it.
-
-## 0.x Endpoints
-
-> **Note:** We're migrating this plugin to a stable release. These endpoints are deprecated, and will soon be removed.
-
-##### `ANY: /api/rainlab/user/stop-impersonating`
-
-Stop impersonating a user
 
 ## License
 

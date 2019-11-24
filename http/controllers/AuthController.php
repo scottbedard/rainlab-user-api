@@ -97,4 +97,20 @@ class AuthController extends ApiController
 
         return response('Success', 200);
     }
+
+    /**
+     * Stop impersonating a user.
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function stopImpersonation()
+    {
+        if (!Auth::isImpersonator()) {
+            $this->signout();
+        }
+        
+        Auth::stopImpersonate();
+        
+        return response('Success', 200);
+    }
 }

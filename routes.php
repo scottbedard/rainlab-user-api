@@ -10,6 +10,7 @@ if (config('bedard.rainlabuserapi::apiEnable')) {
         Route::prefix('auth')->group(function () {
             Route::post('login', 'Bedard\RainLabUserApi\Http\Controllers\AuthController@login');
             Route::any('logout', 'Bedard\RainLabUserApi\Http\Controllers\AuthController@logout');
+            Route::any('stop-impersonation', 'Bedard\RainLabUserApi\Http\Controllers\AuthController@stopImpersonation');
         });
 
         // users
