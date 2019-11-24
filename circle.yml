@@ -6,7 +6,7 @@ jobs:
     steps:
       - run:
           name: Install PHP extensions
-          command: docker-php-ext-install gd
+          command: sudo docker-php-ext-install gd
       - run:
           name: Clone October
           command: |
