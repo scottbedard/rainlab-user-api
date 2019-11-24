@@ -105,11 +105,11 @@ class AuthController extends ApiController
      */
     public function stopImpersonation()
     {
-        if (!Auth::isImpersonator()) {
-            $this->signout();
+        if (Auth::isImpersonator()) {
+            Auth::stopImpersonate();
+        } else {
+            Auth::logout();
         }
-        
-        Auth::stopImpersonate();
         
         return response('Success', 200);
     }

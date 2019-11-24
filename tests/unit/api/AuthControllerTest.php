@@ -167,6 +167,23 @@ class AuthControllerTest extends PluginTestCase
     //
     // stop impersonation
     //
+    public function test_stop_impersonating_without_impersonating()
+    {
+        $user = self::createActivatedUser([
+            'email' => 'sally@example.com',
+            'password' => '12345678',
+        ]);
+
+        Auth::login($user);
+
+        $this->assertTrue(Auth::check());
+
+        $response = $this->get('/api/rainlab/user/auth/stop-impersonation');
+        $response->assertStatus(200);
+
+        $this->assertFalse(Auth::check());
+    }
+
     public function test_stopping_impersonation()
     {
         $user1 = self::createActivatedUser([
@@ -187,6 +204,7 @@ class AuthControllerTest extends PluginTestCase
         $response = $this->get('/api/rainlab/user/auth/stop-impersonation');
         $response->assertStatus(200);
         
+        $this->assertTrue(Auth::check());
         $this->assertFalse(Auth::isImpersonator());
     }
 }

@@ -26,4 +26,11 @@ class AccountManagerTest extends PluginTestCase
         $this->assertInstanceOf(UserModel::class, $user);
         $this->assertEquals('bar', $user->foo);
     }
+
+    public function test_getting_authenticated_user_without_authenticating()
+    {
+        $user = AccountManager::getAuthenticatedUser();
+
+        $this->assertNull($user);
+    }
 }
