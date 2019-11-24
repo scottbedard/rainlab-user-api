@@ -10,7 +10,7 @@ use RainLab\User\Models\Settings as UserSettings;
 class AuthControllerTest extends PluginTestCase
 {
     //
-    // authenticate
+    // signin
     //
     public function test_email_authentication()
     {
@@ -62,5 +62,24 @@ class AuthControllerTest extends PluginTestCase
         $data = json_decode($response->getContent(), true);
 
         $this->assertEquals($user->id, $data['id']);
+    }
+
+    public function test_authenticating_as_a_banned_user()
+    {
+        $user = self::createActivatedUser([
+            'email' => 'john@example.com',
+            'password' => '12345678',
+        ]);
+
+        $user->ban();
+
+        $response = $this->post('/api/rainlab/user/auth/signin', [
+            'email' => $user->email,
+            'password' => '12345678',
+        ]);
+
+        // ideally this would be a 405 response
+        // see: https://github.com/rainlab/user-plugin/issues/413
+        $response->assertStatus(500);
     }
 }

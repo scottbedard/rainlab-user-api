@@ -7,6 +7,7 @@ use Bedard\RainLabUserApi\Classes\ApiController;
 use Bedard\RainLabUserApi\Classes\Utils;
 use Event;
 use Lang;
+use October\Rain\Auth\AuthException;
 use RainLab\User\Models\Settings as UserSettings;
 use Request;
 use Validator;
@@ -64,14 +65,21 @@ class AuthController extends ApiController
 
         Event::fire('rainlab.user.beforeAuthenticate', [$this, $credentials]);
 
-        $user = Auth::authenticate($credentials, $remember);
+        try {
+            $user = Auth::authenticate($credentials, $remember);
+        } catch (AuthException $e) {
+            Auth::logout();
+        }
 
         // check if user is banned
+        // https://github.com/rainlab/user-plugin/issues/413
+        /*
         if ($user->isBanned()) {
             Auth::logout();
 
             return response(Lang::get('rainlab.user::lang.account.banned', 405));
         }
+        */
 
         // record ip address
         if ($ipAddress = Request::ip()) {
