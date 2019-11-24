@@ -6,6 +6,7 @@ use Auth;
 use Bedard\RainLabUserApi\Tests\PluginTestCase;
 use Event;
 use RainLab\User\Models\Settings as UserSettings;
+use RainLab\User\Models\User as UserModel;
 
 class AuthControllerTest extends PluginTestCase
 {
@@ -137,6 +138,8 @@ class AuthControllerTest extends PluginTestCase
     //
     public function test_signing_out()
     {
+        $logout = false;
+
         $user = self::createActivatedUser([
             'email' => 'john@example.com',
             'password' => '12345678',
@@ -146,10 +149,18 @@ class AuthControllerTest extends PluginTestCase
         
         $this->assertTrue(Auth::check());
 
+        Event::listen('rainlab.user.logout', function ($logoutUser) use (&$logout, $user) {
+            $logout = true;
+
+            $this->assertInstanceOf(UserModel::class, $user);
+            $this->assertEquals($user->id, $logoutUser->id);
+        });
+
         $response = $this->get('/api/rainlab/user/auth/signout');
         
         $response->assertStatus(200);
-        
+
         $this->assertFalse(Auth::check());
+        $this->assertTrue($logout);
     }
 }
