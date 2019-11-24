@@ -3,6 +3,7 @@
 namespace Bedard\RainLabUserApi\Http\Controllers;
 
 use Auth;
+use Bedard\RainLabUserApi\Classes\AccountManager;
 use Bedard\RainLabUserApi\Classes\ApiController;
 use Bedard\RainLabUserApi\Classes\Utils;
 use Event;
@@ -76,7 +77,7 @@ class AuthController extends ApiController
             $user->touchIpAddress($ipAddress);
         }
 
-        return $user;
+        return AccountManager::getAuthenticatedUser();
     }
 
     /**

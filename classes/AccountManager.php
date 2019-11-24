@@ -19,13 +19,23 @@ class AccountManager
             return null;
         }
 
-        $user = UserModel::find(Auth::getUser()->id);
+        return self::getUser(Auth::getUser());
+    }
+
+    /**
+     * Get a user with a hook for extensibility.
+     * 
+     * @return \RainLab\User\Models\User
+     */
+    public static function getUser(UserModel $model)
+    {
+        $user = UserModel::find($model->id);
 
         if ($user) {
             $user->touchLastSeen();
-            
-            Event::fire('bedard.rainlabuserapi.afterGetUser', [&$user]);
         }
+
+        Event::fire('bedard.rainlabuserapi.afterGetUser', [&$user]);
 
         return $user;
     }

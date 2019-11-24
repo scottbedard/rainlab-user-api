@@ -3,6 +3,7 @@
 namespace Bedard\RainLabUserApi\Http\Controllers;
 
 use Auth;
+use Bedard\RainLabUserApi\Classes\AccountManager;
 use Bedard\RainLabUserApi\Classes\ApiController;
 use Bedard\RainLabUserApi\Classes\Utils;
 use Event;
@@ -199,7 +200,7 @@ class UsersController extends ApiController
             Auth::login($user);
         }
 
-        return $user;
+        return AccountManager::getUser($user);
     }
 
     /**
