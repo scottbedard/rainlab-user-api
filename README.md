@@ -8,9 +8,8 @@ A simple and extendable HTTP API for [RainLab.User](https://github.com/rainlab/u
 
 - [Installation](#installation--configuration)
 - [Basic Usage](#basic-usage)
-- [Middleware](#adding-middleware)
+- [Adding middleware](#adding-middleware)
 - [Endpoints](#endpoints)
-- [License](#license)
 
 ## Installation & configuration
 
