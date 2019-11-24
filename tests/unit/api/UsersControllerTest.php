@@ -348,8 +348,4 @@ class UsersControllerTest extends PluginTestCase
 
         $response->assertStatus(400);
     }
-
-    // read
-    // update
-    // delete
 }

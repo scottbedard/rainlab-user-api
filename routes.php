@@ -23,6 +23,7 @@ if (config('bedard.rainlabuserapi::apiEnable')) {
         // account
         Route::prefix('account')->middleware('RainLab\User\Classes\AuthMiddleware')->group(function () {
             Route::get('', 'Bedard\RainLabUserApi\Http\Controllers\AccountController@index');
+            Route::post('', 'Bedard\RainLabUserApi\Http\Controllers\AccountController@update');
         });
     });
 }

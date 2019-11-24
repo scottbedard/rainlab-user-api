@@ -69,6 +69,15 @@ class Plugin extends PluginBase
                         'field' => 'activate_mode',
                     ],
                 ],
+
+                // safe password updates
+                'safe_password_updates' => [
+                    'comment' => 'bedard.rainlabuserapi::lang.settings.safe_password_updates_comment',
+                    'label' => 'bedard.rainlabuserapi::lang.settings.safe_password_updates_label',
+                    'span' => 'left',
+                    'tab' => 'bedard.rainlabuserapi::lang.settings.api_tab',
+                    'type' => 'switch',
+                ],
             ]);
         });
     }

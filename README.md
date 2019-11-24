@@ -77,31 +77,31 @@ Create user and trigger activation process.
 
 Activate a new user.
 
-###### `POST: /api/rainlab/users/user/forgot-password`
+##### `POST: /api/rainlab/users/user/forgot-password`
 
 Send the user a link to reset their password.
 
-###### `POST: /api/rainlab/users/user/reset-password`
+##### `POST: /api/rainlab/users/user/reset-password`
 
 Reset a user's password.
 
-###### `GET: /api/rainlab/users/account`
+##### `GET: /api/rainlab/users/account`
 
 Get information about the authenticated user. This route uses the [`AuthMiddleware`](https://github.com/rainlab/user-plugin/blob/master/classes/AuthMiddleware.php), authentication is required to access it.
+
+##### `POST: /api/rainlab/users/account`
+
+Updates information about the authenticated user. This route uses the [`AuthMiddleware`](https://github.com/rainlab/user-plugin/blob/master/classes/AuthMiddleware.php), authentication is required to access it. When changing passwords with safe password updates enabled, the user's current password must be included in the request as `password_current`.
 
 ## 0.x Endpoints
 
 > **Note:** We're migrating this plugin to a stable release. These endpoints are deprecated, and will soon be removed.
 
-###### `POST: /api/rainlab/user`
-
-Updates information about the authenticated user. This route uses the [`AuthMiddleware`](https://github.com/rainlab/user-plugin/blob/master/classes/AuthMiddleware.php), authentication is required to access it.
-
-###### `DELETE: /api/rainlab/user/avatar`
+##### `DELETE: /api/rainlab/user/avatar`
 
 Deletes the authenticated user's avatar. This route uses the [`AuthMiddleware`](https://github.com/rainlab/user-plugin/blob/master/classes/AuthMiddleware.php), authentication is required to access it.
 
-###### `ANY: /api/rainlab/user/stop-impersonating`
+##### `ANY: /api/rainlab/user/stop-impersonating`
 
 Stop impersonating a user
 
