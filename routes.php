@@ -6,11 +6,15 @@ if (config('bedard.rainlabuserapi::apiEnable')) {
 
     // api
     Route::prefix($apiPrefix)->middleware('web')->group(function () {
+        // auth
+        Route::prefix('auth')->group(function () {
+            Route::post('signin', 'Bedard\RainLabUserApi\Http\Controllers\AuthController@signin');
+        });
 
         // users
         Route::prefix('users')->group(function () {
-            Route::post('/', 'Bedard\RainLabUserApi\Http\Controllers\UsersController@store');
-            Route::get('/activate/{code}', 'Bedard\RainLabUserApi\Http\Controllers\UsersController@activate');
+            Route::post('', 'Bedard\RainLabUserApi\Http\Controllers\UsersController@store');
+            Route::get('activate/{code}', 'Bedard\RainLabUserApi\Http\Controllers\UsersController@activate');
         });
     });
 }

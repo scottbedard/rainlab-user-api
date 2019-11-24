@@ -2,6 +2,7 @@
 
 namespace Bedard\RainLabUserApi\Tests\Unit\Api;
 
+use Auth;
 use Bedard\RainLabUserApi\Classes\Utils;
 use Bedard\RainLabUserApi\Tests\PluginTestCase;
 use Config;
@@ -177,6 +178,8 @@ class UsersControllerTest extends PluginTestCase
 
         $request = $this->get('/api/rainlab/user/users/activate/' . $code);
         $request->assertRedirect('/welcome');
+
+        $this->assertEquals($user->id, Auth::getUser()->id);
     }
 
     public function test_activating_with_invalid_code()

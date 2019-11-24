@@ -8,8 +8,8 @@ use Bedard\RainLabUserApi\Classes\Utils;
 use Event;
 use Lang;
 use Mail;
-use RainLab\User\Models\Settings;
-use RainLab\User\Models\User;
+use RainLab\User\Models\Settings as UserSettings;
+use RainLab\User\Models\User as UserModel;
 use Request;
 use Validator;
 
@@ -42,7 +42,7 @@ class UsersController extends ApiController
             return response(Lang::get('rainlab.user::lang.account.invalid_activation_code'), 400);
         }
 
-        return redirect(Settings::get('activate_redirect', '/'));
+        return redirect(UserSettings::get('activate_redirect', '/'));
     }
 
     /**
@@ -74,7 +74,7 @@ class UsersController extends ApiController
             'password' => 'required|between:4,255|confirmed',
         ];
 
-        if ($this->loginAttribute() == Settings::LOGIN_USERNAME) {
+        if (Utils::loginAttribute() == UserSettings::LOGIN_USERNAME) {
             $rules['username'] = 'required|between:2,255';
         }
 
@@ -92,9 +92,9 @@ class UsersController extends ApiController
         // register the user
         Event::fire('rainlab.user.beforeRegister', [&$data]);
 
-        $automaticActivation = Settings::get('activate_mode') == Settings::ACTIVATE_AUTO;
-        $requireActivation = Settings::get('require_activation', true);
-        $userActivation = Settings::get('activate_mode') == Settings::ACTIVATE_USER;
+        $automaticActivation = UserSettings::get('activate_mode') == UserSettings::ACTIVATE_AUTO;
+        $requireActivation = UserSettings::get('require_activation', true);
+        $userActivation = UserSettings::get('activate_mode') == UserSettings::ACTIVATE_USER;
 
         $user = Auth::register($data, $automaticActivation);
 
@@ -120,7 +120,7 @@ class UsersController extends ApiController
      */
     protected function canRegister()
     {
-        return Settings::get('allow_registration', true);
+        return UserSettings::get('allow_registration', true);
     }
 
     /**
@@ -130,30 +130,21 @@ class UsersController extends ApiController
      */
     protected function isRegisterThrottled()
     {
-        if (!Settings::get('use_register_throttle', false)) {
+        if (!UserSettings::get('use_register_throttle', false)) {
             return false;
         }
 
-        return User::isRegisterThrottled(Request::ip());
-    }
-
-    /**
-     * Returns the login model attribute.
-     * 
-     * @return string
-     */
-    protected function loginAttribute()
-    {
-        return Settings::get('login_attribute', Settings::LOGIN_EMAIL);
+        return UserModel::isRegisterThrottled(Request::ip());
     }
     
     /**
     * Sends the activation email to a user.
     *
     * @param  User $user
+    *
     * @return void
     */
-   protected function sendActivationEmail($user)
+   protected function sendActivationEmail(UserModel $user)
    {
        $code = Utils::activationCode($user);
        $link = Utils::activationLink($code);

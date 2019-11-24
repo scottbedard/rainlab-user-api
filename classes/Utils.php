@@ -2,7 +2,8 @@
 
 namespace Bedard\RainLabUserApi\Classes;
 
-use RainLab\User\Models\User;
+use RainLab\User\Models\Settings as UserSettings;
+use RainLab\User\Models\User as UserModel;
 
 class Utils
 {
@@ -25,8 +26,28 @@ class Utils
      * 
      * @return string
      */
-    public static function activationCode(User $user)
+    public static function activationCode(UserModel $user)
     {
         return implode('!', [$user->id, $user->getActivationCode()]);
+    }
+
+    /**
+     * Returns the login model attribute.
+     * 
+     * @return string
+     */
+    public static function loginAttribute()
+    {
+        return UserSettings::get('login_attribute', UserSettings::LOGIN_EMAIL);
+    }
+
+    /**
+     * Returns the login remember mode.
+     * 
+     * @return string
+     */
+    public static function rememberLoginMode()
+    {
+        return UserSettings::get('remember_login', UserSettings::REMEMBER_ALWAYS);
     }
 }

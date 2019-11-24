@@ -7,7 +7,7 @@ A simple and extendable HTTP API for [RainLab.User](https://github.com/rainlab/u
 
 > **Warning:** This plugin is in active development. Be careful using it, API changes may happen at any time.
 
-- [Plugin Usage](#plugin-usage)
+- [Basic Usage](#basic-usage)
 - [Middleware](#middleware)
 - [Endpoints](#endpoints)
 
@@ -61,9 +61,13 @@ public function boot()
 
 ## Endpoints
 
-`POST: /api/rainlab/user/users`
+##### `POST: /api/rainlab/user/users`
 
 Registers a user, and triggers related events and activation processes.
+
+##### `GET: /api/rainlab/users/user/activate/{code}`
+
+Activate a new user.
 
 ## 0.x Endpoints
 
@@ -87,11 +91,7 @@ Sign out the authenticated user.
 
 ###### `ANY: /api/rainlab/user/stop-impersonating`
 
-Stop impersonating a user.
-
-###### `GET: /api/rainlab/user/activate`
-
-Activate a new user.
+Stop impersonating a user
 
 ###### `GET: /api/rainlab/user/reset-password`
 
