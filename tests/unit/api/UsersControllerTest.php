@@ -342,10 +342,29 @@ class UsersControllerTest extends PluginTestCase
         $user->getResetPasswordCode();
 
         $response = $this->post('/api/rainlab/user/users/reset-password', [
-            'code' => implode('!', [$user->id, 'badcode']),
+            'code' => implode('!', [$user->id, 'abc123']),
             'password' => 'helloworld',
         ]);
 
         $response->assertStatus(400);
+    }
+
+    public function test_resetting_password_with_malformed_code()
+    {
+        $user = self::createActivatedUser([
+            'email' => 'john@example.com',
+            'name' => 'John Doe',
+            'password' => '12345678',
+            'username' => 'john',
+        ]);
+
+        $user->getResetPasswordCode();
+
+        $response = $this->post('/api/rainlab/user/users/reset-password', [
+            'code' => ' ! ',
+            'password' => 'helloworld',
+        ]);
+
+        // $response->assertStatus(400);
     }
 }
