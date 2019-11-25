@@ -235,7 +235,7 @@ class UsersController extends ApiController
     /**
      * Sends the activation email to a user.
      *
-     * @param  User $user
+     * @param User $user
      *
      * @return void
      */
