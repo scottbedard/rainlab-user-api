@@ -164,14 +164,14 @@ class UsersControllerTest extends PluginTestCase
         ]);
 
         $response = $this->post('/api/rainlab/user/users', [
-            'email' => 'foo@bar.com',
+            'email'    => 'foo@bar.com',
             'password' => 'whatever',
         ]);
 
         $response->assertStatus(422);
-        
+
         $data = json_decode($response->getContent(), true);
-        
+
         $this->assertArrayHasKey('email', $data);
     }
 
@@ -180,12 +180,12 @@ class UsersControllerTest extends PluginTestCase
         Settings::set('login_attribute', Settings::LOGIN_USERNAME);
 
         $user = self::createActivatedUser([
-            'email' => 'one@two.com',
+            'email'    => 'one@two.com',
             'username' => 'foobar',
         ]);
 
         $response = $this->post('/api/rainlab/user/users', [
-            'email' => 'foo@bar.com',
+            'email'    => 'foo@bar.com',
             'password' => 'whatever',
             'username' => 'foobar',
         ]);
@@ -196,7 +196,7 @@ class UsersControllerTest extends PluginTestCase
 
         $this->assertArrayHasKey('username', $data);
     }
-    
+
     //
     // activate
     //
@@ -380,7 +380,7 @@ class UsersControllerTest extends PluginTestCase
         $user->getResetPasswordCode();
 
         $response = $this->post('/api/rainlab/user/users/reset-password', [
-            'code' => implode('!', [$user->id, 'badcode']),
+            'code'     => implode('!', [$user->id, 'badcode']),
             'password' => 'helloworld',
         ]);
 
