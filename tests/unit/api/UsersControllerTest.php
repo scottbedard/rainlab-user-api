@@ -368,6 +368,16 @@ class UsersControllerTest extends PluginTestCase
         $response->assertStatus(400);
     }
 
+    public function test_resetting_password_with_malformed_code()
+    {
+        $response = $this->post('/api/rainlab/user/users/reset-password', [
+            'code'     => '1!',
+            'password' => 'helloworld',
+        ]);
+
+        $response->assertStatus(400);
+    }
+
     public function test_resetting_password_with_incorrect_code()
     {
         $user = self::createActivatedUser([
