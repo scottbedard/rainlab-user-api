@@ -157,6 +157,49 @@ class UsersControllerTest extends PluginTestCase
         $this->assertEquals('sally@example.com', $data['email']);
     }
 
+<<<<<<< HEAD
+=======
+    public function test_registering_taken_email()
+    {
+        $user = self::createActivatedUser([
+            'email' => 'foo@bar.com',
+        ]);
+
+        $response = $this->post('/api/rainlab/user/users', [
+            'email' => 'foo@bar.com',
+            'password' => 'whatever',
+        ]);
+
+        $response->assertStatus(422);
+        
+        $data = json_decode($response->getContent(), true);
+        
+        $this->assertArrayHasKey('email', $data);
+    }
+
+    public function test_registering_taken_username()
+    {
+        Settings::set('login_attribute', Settings::LOGIN_USERNAME);
+
+        $user = self::createActivatedUser([
+            'email' => 'one@two.com',
+            'username' => 'foobar',
+        ]);
+
+        $response = $this->post('/api/rainlab/user/users', [
+            'email' => 'foo@bar.com',
+            'password' => 'whatever',
+            'username' => 'foobar',
+        ]);
+
+        $response->assertStatus(422);
+
+        $data = json_decode($response->getContent(), true);
+
+        $this->assertArrayHasKey('username', $data);
+    }
+    
+>>>>>>> catch model exceptions and return 422 response
     //
     // activate
     //
@@ -340,12 +383,17 @@ class UsersControllerTest extends PluginTestCase
         $user->getResetPasswordCode();
 
         $response = $this->post('/api/rainlab/user/users/reset-password', [
+<<<<<<< HEAD
             'code'     => implode('!', [$user->id, 'abc123']),
+=======
+            'code' => implode('!', [$user->id, 'badcode']),
+>>>>>>> catch model exceptions and return 422 response
             'password' => 'helloworld',
         ]);
 
         $response->assertStatus(400);
     }
+<<<<<<< HEAD
 
     public function test_resetting_password_with_malformed_code()
     {
@@ -366,3 +414,6 @@ class UsersControllerTest extends PluginTestCase
         // $response->assertStatus(400);
     }
 }
+=======
+}
+>>>>>>> catch model exceptions and return 422 response

@@ -9,6 +9,7 @@ use Bedard\RainLabUserApi\Classes\Utils;
 use Event;
 use Lang;
 use Mail;
+use October\Rain\Database\ModelException;
 use RainLab\User\Models\Settings as UserSettings;
 use RainLab\User\Models\User as UserModel;
 use Request;
@@ -161,8 +162,10 @@ class UsersController extends ApiController
 
         $rules = [
             'email'    => 'required|email|between:6,255',
-            'password' => 'required|between:4,255|confirmed',
+            'password' => 'required|between:8,255|confirmed',
         ];
+
+        $loginAttribute = Utils::loginAttribute();
 
         if (Utils::loginAttribute() == UserSettings::LOGIN_USERNAME) {
             $rules['username'] = 'required|between:2,255';
@@ -186,7 +189,11 @@ class UsersController extends ApiController
         $requireActivation = UserSettings::get('require_activation', true);
         $userActivation = UserSettings::get('activate_mode') == UserSettings::ACTIVATE_USER;
 
-        $user = Auth::register($data, $automaticActivation);
+        try {
+            $user = Auth::register($data, $automaticActivation);
+        } catch (ModelException $e) {
+            return response($e->getErrors()->messages(), 422);
+        }
 
         Event::fire('rainlab.user.register', [$user, $data]);
 
