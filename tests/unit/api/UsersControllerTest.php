@@ -157,8 +157,6 @@ class UsersControllerTest extends PluginTestCase
         $this->assertEquals('sally@example.com', $data['email']);
     }
 
-<<<<<<< HEAD
-=======
     public function test_registering_taken_email()
     {
         $user = self::createActivatedUser([
@@ -199,7 +197,6 @@ class UsersControllerTest extends PluginTestCase
         $this->assertArrayHasKey('username', $data);
     }
     
->>>>>>> catch model exceptions and return 422 response
     //
     // activate
     //
@@ -383,37 +380,10 @@ class UsersControllerTest extends PluginTestCase
         $user->getResetPasswordCode();
 
         $response = $this->post('/api/rainlab/user/users/reset-password', [
-<<<<<<< HEAD
-            'code'     => implode('!', [$user->id, 'abc123']),
-=======
             'code' => implode('!', [$user->id, 'badcode']),
->>>>>>> catch model exceptions and return 422 response
             'password' => 'helloworld',
         ]);
 
         $response->assertStatus(400);
     }
-<<<<<<< HEAD
-
-    public function test_resetting_password_with_malformed_code()
-    {
-        $user = self::createActivatedUser([
-            'email'    => 'john@example.com',
-            'name'     => 'John Doe',
-            'password' => '12345678',
-            'username' => 'john',
-        ]);
-
-        $user->getResetPasswordCode();
-
-        $response = $this->post('/api/rainlab/user/users/reset-password', [
-            'code'     => ' ! ',
-            'password' => 'helloworld',
-        ]);
-
-        // $response->assertStatus(400);
-    }
 }
-=======
-}
->>>>>>> catch model exceptions and return 422 response

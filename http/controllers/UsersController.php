@@ -165,8 +165,6 @@ class UsersController extends ApiController
             'password' => 'required|between:8,255|confirmed',
         ];
 
-        $loginAttribute = Utils::loginAttribute();
-
         if (Utils::loginAttribute() == UserSettings::LOGIN_USERNAME) {
             $rules['username'] = 'required|between:2,255';
         }
