@@ -104,6 +104,22 @@ class UsersControllerTest extends PluginTestCase
         $this->assertTrue($sent);
     }
 
+    public function test_registering_with_auto_activation()
+    {
+        Settings::set('activate_mode', Settings::ACTIVATE_AUTO);
+
+        $response = $this->post('/api/rainlab/user/users', [
+            'email'                 => 'john@example.com',
+            'name'                  => 'John Doe',
+            'password'              => '12345678',
+            'password_confirmation' => '12345678',
+        ]);
+
+        $data = json_decode($response->getContent(), 200);
+
+        $this->assertTrue($data['is_activated']);
+    }
+
     public function test_registration_throttling()
     {
         Settings::set('use_register_throttle', false);
