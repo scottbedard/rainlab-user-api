@@ -72,7 +72,7 @@ public function boot()
 
 Authenticate a user.
 
-###### `ANY: /api/rainlab/user/auth/logout`
+##### `ANY: /api/rainlab/user/auth/logout`
 
 Log out the authenticated user.
 
