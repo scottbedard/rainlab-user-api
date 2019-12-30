@@ -140,6 +140,23 @@ class AccountControllerTest extends PluginTestCase
         $this->assertNotNull($user->avatar);
     }
 
+    public function test_validation_errors_on_account_update()
+    {
+        $user = self::createActivatedUser([
+            'email'    => 'john@example.com',
+            'password' => '12345678',
+        ]);
+
+        Auth::login($user);
+
+        $response = $this->post('/api/rainlab/user/account', [
+            'password'              => 'abc', // passwords must be 8 chars long
+            'password_confirmation' => 'abc',
+        ]);
+
+        $response->assertStatus(422);
+    }
+
     //
     // delete avatar
     //

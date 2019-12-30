@@ -7,6 +7,7 @@ use Bedard\RainLabUserApi\Classes\AccountManager;
 use Bedard\RainLabUserApi\Classes\ApiController;
 use Input;
 use Lang;
+use October\Rain\Database\ModelException;
 use RainLab\User\Models\Settings as UserSettings;
 
 class AccountController extends ApiController
@@ -58,12 +59,16 @@ class AccountController extends ApiController
         }
 
         // update the user data
-        if (Input::hasFile('avatar')) {
-            $user->avatar = Input::file('avatar');
-        }
+        try {
+            if (Input::hasFile('avatar')) {
+                $user->avatar = Input::file('avatar');
+            }
 
-        $user->fill($data);
-        $user->save();
+            $user->fill($data);
+            $user->save();
+        } catch (ModelException $e) {
+            return response($e->getErrors()->messages(), 422);
+        }
 
         return AccountManager::getAuthenticatedUser();
     }
