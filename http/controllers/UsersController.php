@@ -245,10 +245,10 @@ class UsersController extends ApiController
         $link = Utils::activationLink($code);
 
         $data = [
-           'code' => $code,
-           'link' => $link,
-           'name' => $user->name,
-       ];
+            'code' => $code,
+            'link' => $link,
+            'name' => $user->name,
+        ];
 
         Mail::send('rainlab.user::mail.activate', $data, function ($message) use ($user) {
             $message->to($user->email, $user->name);
