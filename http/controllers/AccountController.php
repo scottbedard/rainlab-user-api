@@ -66,6 +66,11 @@ class AccountController extends ApiController
 
             $user->fill($data);
             $user->save();
+
+            // password has changed, reauthenticate the user
+            if (array_key_exists('password', $data) && strlen($data['password'])) {
+                Auth::login($user->reload(), true);
+            }
         } catch (ModelException $e) {
             return response($e->getErrors()->messages(), 422);
         }
