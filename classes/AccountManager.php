@@ -3,7 +3,6 @@
 namespace Bedard\RainLabUserApi\Classes;
 
 use Auth;
-use Bedard\RainLabUserApi\Classes\Utils;
 use Event;
 use Mail;
 use RainLab\User\Models\User as UserModel;
