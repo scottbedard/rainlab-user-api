@@ -52,7 +52,7 @@ class AccountManagerTest extends PluginTestCase
 
             $sent = true;
         });
-        
+
         AccountManager::sendActivationEmail($user);
 
         $this->assertTrue($sent);
