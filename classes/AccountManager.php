@@ -3,7 +3,9 @@
 namespace Bedard\RainLabUserApi\Classes;
 
 use Auth;
+use Bedard\RainLabUserApi\Classes\Utils;
 use Event;
+use Mail;
 use RainLab\User\Models\User as UserModel;
 
 class AccountManager
@@ -38,5 +40,29 @@ class AccountManager
         Event::fire('bedard.rainlabuserapi.afterGetUser', [&$user]);
 
         return $user;
+    }
+
+    /**
+     * Sends the activation email to a user.
+     *
+     * @param User $user
+     *
+     * @return void
+     */
+    public static function sendActivationEmail(UserModel $user)
+    {
+        $code = Utils::activationCode($user);
+
+        $link = Utils::activationLink($code);
+
+        $data = [
+            'code' => $code,
+            'link' => $link,
+            'name' => $user->name,
+        ];
+
+        Mail::send('rainlab.user::mail.activate', $data, function ($message) use ($user) {
+            $message->to($user->email, $user->name);
+        });
     }
 }

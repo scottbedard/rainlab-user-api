@@ -4,6 +4,7 @@ namespace Bedard\RainLabUserApi\Tests\Unit\Classes;
 
 use Auth;
 use Bedard\RainLabUserApi\Classes\AccountManager;
+use Bedard\RainLabUserApi\Classes\Utils;
 use Bedard\RainLabUserApi\Tests\PluginTestCase;
 use Event;
 use RainLab\User\Models\User as UserModel;
@@ -32,5 +33,28 @@ class AccountManagerTest extends PluginTestCase
         $user = AccountManager::getAuthenticatedUser();
 
         $this->assertNull($user);
+    }
+
+    public function test_sending_a_users_activation_email()
+    {
+        $sent = false;
+
+        $user = $this->createUser();
+
+        Event::listen('mailer.beforeSend', function ($view, $data) use (&$sent, $user) {
+            $expectedCode = implode('!', [$user->id, $user->activation_code]);
+
+            $this->assertArraySubset([
+                'name' => $user->name,
+                'code' => $expectedCode,
+                'link' => Utils::activationLink($expectedCode),
+            ], $data);
+
+            $sent = true;
+        });
+        
+        AccountManager::sendActivationEmail($user);
+
+        $this->assertTrue($sent);
     }
 }

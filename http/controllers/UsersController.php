@@ -197,7 +197,7 @@ class UsersController extends ApiController
 
         // send email if activation is performed by the user
         if ($userActivation) {
-            $this->sendActivationEmail($user);
+            AccountManager::sendActivationEmail($user);
         }
 
         // automatically activated or not required, log the user in
@@ -230,28 +230,5 @@ class UsersController extends ApiController
         }
 
         return UserModel::isRegisterThrottled(Request::ip());
-    }
-
-    /**
-     * Sends the activation email to a user.
-     *
-     * @param User $user
-     *
-     * @return void
-     */
-    protected function sendActivationEmail(UserModel $user)
-    {
-        $code = Utils::activationCode($user);
-        $link = Utils::activationLink($code);
-
-        $data = [
-            'code' => $code,
-            'link' => $link,
-            'name' => $user->name,
-        ];
-
-        Mail::send('rainlab.user::mail.activate', $data, function ($message) use ($user) {
-            $message->to($user->email, $user->name);
-        });
     }
 }
