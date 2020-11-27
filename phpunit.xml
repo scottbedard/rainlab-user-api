@@ -8,8 +8,7 @@
     convertNoticesToExceptions="true"
     convertWarningsToExceptions="true"
     processIsolation="true"
-    stopOnFailure="false"
-    syntaxCheck="false">
+    stopOnFailure="false">
     <testsuites>
         <testsuite name="bedard.rainlabuserapi">
             <directory>./tests</directory>
