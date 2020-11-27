@@ -28,14 +28,20 @@ class UsersControllerTest extends PluginTestCase
 
         Event::listen('rainlab.user.beforeRegister', function ($data) use (&$beforeRegisterFired, $params) {
             $beforeRegisterFired = true;
-            $this->assertArraySubset($params, $data);
+            $this->assertEquals($params['email'], $data['email']);
+            $this->assertEquals($params['name'], $data['name']);
+            $this->assertEquals($params['password'], $data['password']);
+            $this->assertEquals($params['password_confirmation'], $data['password_confirmation']);
         });
 
         Event::listen('rainlab.user.register', function ($user, $data) use (&$beforeRegisterFired, &$registerFired, $params) {
             $registerFired = true;
             $this->assertTrue($beforeRegisterFired);
             $this->assertInstanceOf(User::class, $user);
-            $this->assertArraySubset($params, $data);
+            $this->assertEquals($params['name'], $data['name']);
+            $this->assertEquals($params['email'], $data['email']);
+            $this->assertEquals($params['password'], $data['password']);
+            $this->assertEquals($params['password_confirmation'], $data['password_confirmation']);
         });
 
         $response = $this->post('/api/rainlab/user/users', $params);
@@ -85,11 +91,9 @@ class UsersControllerTest extends PluginTestCase
             $user = User::first();
             $expectedCode = implode('!', [$user->id, $user->activation_code]);
 
-            $this->assertArraySubset([
-                'name' => $user->name,
-                'code' => $expectedCode,
-                'link' => Utils::activationLink($expectedCode),
-            ], $data);
+            $this->assertEquals($user->name, $data['name']);
+            $this->assertEquals($expectedCode, $data['code']);
+            $this->assertEquals(Utils::activationLink($expectedCode), $data['link']);
 
             $sent = true;
         });
@@ -281,12 +285,10 @@ class UsersControllerTest extends PluginTestCase
             $code = implode('!', [$resetUser->id, $resetUser->reset_password_code]);
             $link = str_replace('{code}', $code, Settings::get('password_reset_url'));
 
-            $this->assertArraySubset([
-                'code'     => $code,
-                'link'     => $link,
-                'name'     => $resetUser->name,
-                'username' => $resetUser->username,
-            ], $data);
+            $this->assertEquals($code, $data['code']);
+            $this->assertEquals($link, $data['link']);
+            $this->assertEquals($resetUser->name, $data['name']);
+            $this->assertEquals($resetUser->username, $data['username']);
 
             $sent = true;
         });

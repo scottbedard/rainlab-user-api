@@ -23,10 +23,8 @@ class AuthControllerTest extends PluginTestCase
         $beforeAuthenticate = false;
 
         Event::listen('rainlab.user.beforeAuthenticate', function ($controller, $credentials) use (&$beforeAuthenticate, $user) {
-            $this->assertArraySubset([
-                'login'    => $user->email,
-                'password' => '12345678',
-            ], $credentials);
+            $this->assertEquals($user->email, $credentials['login']);
+            $this->assertEquals('12345678', $credentials['password']);
 
             $beforeAuthenticate = true;
         });

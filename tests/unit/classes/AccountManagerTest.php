@@ -44,11 +44,9 @@ class AccountManagerTest extends PluginTestCase
         Event::listen('mailer.beforeSend', function ($view, $data) use (&$sent, $user) {
             $expectedCode = implode('!', [$user->id, $user->activation_code]);
 
-            $this->assertArraySubset([
-                'name' => $user->name,
-                'code' => $expectedCode,
-                'link' => Utils::activationLink($expectedCode),
-            ], $data);
+            $this->assertEquals($user->name, $data['name']);
+            $this->assertEquals($expectedCode, $data['code']);
+            $this->assertEquals(Utils::activationLink($expectedCode), $data['link']);
 
             $sent = true;
         });
