@@ -1,0 +1,40 @@
+name: Test
+
+on: [push]
+
+jobs:
+  backend:
+    name: PHPUnit
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+    - name: Downgrade Composer
+      run: |
+        echo "Temporary, see https://github.com/octobercms/october/issues/5033"
+        sudo composer self-update 1.10.17
+    - name: Clone October
+      run: |
+        shopt -s extglob dotglob
+        git clone https://github.com/octobercms/october.git
+        mkdir --parents october/plugins/bedard/rainlabuserapi
+        mv !(october) october/plugins/bedard/rainlabuserapi
+    - name: Clone RainLab.User
+      run: |
+        mkdir --parents october/plugins/rainlab/user
+        git clone https://github.com/rainlab/user-plugin.git october/plugins/rainlab/user
+    - name: Configure October
+      run: |
+        sed -i "s/'driver' => 'smtp'/'driver' => 'log'/" october/config/mail.php
+    - name: Install Dependencies
+      run: |
+        cd october
+        composer install
+    - name: PHPUnit
+      run: |
+        cd october/plugins/bedard/rainlabuserapi
+        phpunit --coverage-clover clover.xml
+    - name: Codecov
+      run: |
+        bash <(curl -s https://codecov.io/bash) -v -cF php
