@@ -1,6 +1,6 @@
 # rainlab-user-api
 
-[![Build status](https://img.shields.io/circleci/build/github/scottbedard/rainlab-user-api)](https://circleci.com/gh/scottbedard/rainlab-user-api)
+[![Build status](https://img.shields.io/github/workflow/status/scottbedard/rainlab-user-api/Test)](https://github.com/scottbedard/rainlab-user-api/actions)
 [![Code coverage](https://img.shields.io/codecov/c/github/scottbedard/rainlab-user-api)](https://codecov.io/gh/scottbedard/rainlab-user-api)
 [![Code style](https://github.styleci.io/repos/124563300/shield?style=flat)](https://github.styleci.io/repos/124563300)
 [![MIT License](https://img.shields.io/github/license/scottbedard/rainlab-user-api?color=blue)](https://github.com/scottbedard/rainlab-user-api/blob/master/LICENSE)
